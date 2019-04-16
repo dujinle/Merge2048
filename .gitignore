@@ -1,0 +1,10 @@
+MINI2048/library/*
+MINI2048/local/*
+MINI2048/temp/*
+MINI2048/settings/*
+MINI2048/wxbuild/*
+wx-open-data-project/build/*
+wx-open-data-project/library/*
+wx-open-data-project/local/*
+wx-open-data-project/temp/*
+wx-open-data-project/settings/*

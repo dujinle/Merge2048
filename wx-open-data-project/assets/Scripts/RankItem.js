@@ -3,7 +3,6 @@ cc.Class({
 
     properties: {
 		itemID:0,
-		rankLabel:cc.Node,
 		nameLabel:cc.Node,
 		avatarSprite:cc.Node,
 		scoreLabel:cc.Node,
@@ -14,7 +13,6 @@ cc.Class({
 	},
     loadRank(data){
 		console.log("loadRank start......");
-		this.rankLabel.getComponent(cc.Label).string = data.rank;
 		this.nameLabel.getComponent(cc.Label).string = data.nickname;
 		this.scoreLabel.getComponent(cc.Label).string = 0;
 		for(var i = 0;i < data.KVDataList.length;i++){

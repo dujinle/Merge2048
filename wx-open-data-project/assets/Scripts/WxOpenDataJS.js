@@ -3,7 +3,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-		finishGameRank:cc.Node,
 		rankGmameView:cc.Node,
 		aboveGameView:cc.Node,
     },
@@ -104,7 +103,6 @@ cc.Class({
 		});
 	},
 	setViewVisiable(type){
-		this.finishGameRank.active = false;
 		this.rankGmameView.active = false;
 		this.aboveGameView.active = false;
 		if(type == 'battleUIRank'){
@@ -113,8 +111,6 @@ cc.Class({
 			this.rankGmameView.active = true;
 		}else if(type == 'rankUIFriendRank'){
 			this.rankGmameView.active = true;
-		}else if(type == 'gameOverUIRank'){
-			this.finishGameRank.active = true;
 		}
 	},
 	drawRankOverList(dataList,data){
@@ -189,9 +185,7 @@ cc.Class({
 	},
 	drawRankList(drawList,data){
 		console.log('drawRankList',drawList,data);
-		if(data.type == "gameOverUIRank"){
-			this.finishGameRank.getComponent("FinishGameRank").loadRank(drawList);
-		}else if(data.type == "rankUIFriendRank" || data.type == "rankUIGroupRank"){
+		if(data.type == "rankUIFriendRank" || data.type == "rankUIGroupRank"){
 			this.rankGmameView.getComponent("RankGameView").loadRank(drawList);
 		}else if(data.type == 'battleUIRank'){
 			if(this.battleInit == true){

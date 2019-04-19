@@ -17,8 +17,16 @@ cc.Class({
 		soundOffNode:cc.Node,
 		innerChain:cc.Node,
 		oneInner:cc.Node,
+		voiceManager:null,
     },
 	onLoad(){
+		this.nodePosChange = {};
+		this.battleButton.getComponent(cc.Button).interactable = false;
+		this.startButton.getComponent(cc.Button).interactable = false;
+		for(var i = 0;i < this.buttonLayout.children.length;i++){
+			var nodeButton = this.buttonLayout.children[i];
+			nodeButton.getComponent(cc.Button).interactable = false;
+		}
 	},
 	refreshGame(){
 		this.initInnerChain(0);
@@ -48,7 +56,19 @@ cc.Class({
 			this.oneInner.getComponent('LockerItem').setLinkGame(GlobalData.cdnOtherGameDoor.InnerChain);
 		}
 	},
+	finishLoad(voiceManager){
+		this.voiceManager = voiceManager;
+		this.battleButton.getComponent(cc.Button).interactable = true;
+		this.startButton.getComponent(cc.Button).interactable = true;
+		for(var i = 0;i < this.buttonLayout.children.length;i++){
+			var nodeButton = this.buttonLayout.children[i];
+			nodeButton.getComponent(cc.Button).interactable = true;
+		}
+	},
 	shareButtonCb(){
+		if(this.voiceManager != null){
+			this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+		}
 		var param = {
 			type:null,
 			arg:null,
@@ -65,6 +85,9 @@ cc.Class({
 			this.soundOffNode.active = false;
 			GlobalData.AudioSupport = true;
 		}else{
+			if(this.voiceManager != null){
+				this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+			}
 			GlobalData.AudioSupport = false;
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
@@ -74,7 +97,7 @@ cc.Class({
 		EventManager.emit({type:'RankView'});
 	},
 	startButtonCb(){
-		EventManager.emit({type:'StartGame'});
+		EventManager.emitLogic({type:'StartGame'});
 	},
 	shareSuccessCb(type, shareTicket, arg){
 		console.log(type, shareTicket, arg);
@@ -155,9 +178,73 @@ cc.Class({
 			});
 		}catch(err){}
 	},
+	slideIn(node,type){
+		//支持节点动作滑入 type 指定方向上下左右
+		var originPos = node.getPosition();
+		var winSize = this.node.getContentSize();
+		var nodeSize = node.getContentSize();
+		if(type == 'UP'){
+			var yy = winSize.height/2 + nodeSize.height/2;
+			node.setPosition(cc.v2(originPos.x,yy));
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			node.runAction(moveTo);
+		}else if(type == 'DOWN'){
+			var yy = (winSize.height/2 + nodeSize.height/2) * -1;
+			node.setPosition(cc.v2(originPos.x,yy));
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			node.runAction(moveTo);
+		}else if(type == 'LEFT'){
+			var xx = (winSize.width/2 + nodeSize.width/2) * -1;
+			node.setPosition(cc.v2(xx,originPos.y));
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			node.runAction(moveTo);
+		}else if(type == 'RIGHT'){
+			var xx = winSize.width/2 + nodeSize.width/2;
+			node.setPosition(cc.v2(xx,originPos.y));
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			node.runAction(moveTo);
+		}
+		this.nodePosChange[node.uuid] = [node,originPos];
+	},
+	slideOut(node,type){
+		//支持节点动作滑出 type 指定方向上下左右
+		var originPos = node.getPosition();
+		var winSize = this.node.getContentSize();
+		var nodeSize = node.getContentSize();
+		if(this.nodePosChange[node.uuid] != null){
+			var nodeInfo = this.nodePosChange[node.uuid];
+			node.setPosition(nodeInfo[1]);
+			originPos = node.getPosition();
+		}
+		if(type == 'UP'){
+			var yy = winSize.height/2 + nodeSize.height/2;
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
+			node.runAction(moveTo);
+		}else if(type == 'DOWN'){
+			var yy = (winSize.height/2 + nodeSize.height/2) * -1;
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
+			node.runAction(moveTo);
+		}else if(type == 'LEFT'){
+			var xx = (winSize.width/2 + nodeSize.width/2) * -1;
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
+			node.runAction(moveTo);
+		}else if(type == 'RIGHT'){
+			var xx = winSize.width/2 + nodeSize.width/2;
+			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
+			node.runAction(moveTo);
+		}
+	},
+	resetPos(){
+		for(var key in this.nodePosChange){
+			var nodeInfo = this.nodePosChange[key];
+			nodeInfo[0].setPosition(nodeInfo[1]);
+		}
+	},
 	showStart(){
 		console.log("start game board show");
+		this.node.active = true;
 		this.openType = null;
+		
 		if(GlobalData.AudioSupport == false){
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
@@ -175,70 +262,19 @@ cc.Class({
 		}else{
 			this.buttonLayout.active = false;
 		}
-		if(this.gameStart == false){
-			this.node.active = true;
-			this.scoreLabel.active = true;
-			this.kingSprite.active = true;
-			this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
-			var winSize = this.node.getContentSize();
-			//logo 效果设置
-			this.logoPos = this.gameLogo.getPosition();
-			var logoSize = this.gameLogo.getContentSize();
-			var logoY = winSize.height/2 + logoSize.height/2;
-			this.gameLogo.setPosition(cc.v2(this.logoPos.x,logoY));
-			var logoMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.logoPos);
-			this.gameLogo.runAction(logoMoveTo);
-			//开始效果设置
-			this.startPos = this.startButton.getPosition();
-			var startSize = this.startButton.getContentSize();
-			var startX = (startSize.width/2 + winSize.width/2) * -1;
-			this.startButton.setPosition(cc.v2(startX,this.startPos.y));
-			var startMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.startPos);
-			this.startButton.runAction(startMoveTo);
-			
-			//挑战效果设置
-			this.battlePos = this.battleButton.getPosition();
-			if(this.battleButton.active == true){
-				var battleSize = this.battleButton.getContentSize();
-				var battleX = (battleSize.width/2 + winSize.width/2);
-				this.battleButton.setPosition(cc.v2(battleX,this.battlePos.y));
-				var battleMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.battlePos);
-				this.battleButton.runAction(battleMoveTo);
-			}
-			//分享，排行，声音效果设置
-			this.layoutPos = this.buttonLayout.getPosition();
-			if(this.buttonLayout.active == true){
-				var layoutSize = this.buttonLayout.getContentSize();
-				var layoutY = (winSize.height/2 + logoSize.height/2) * -1;
-				this.buttonLayout.setPosition(cc.v2(this.layoutPos.x,layoutY));
-				var layoutMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.layoutPos);
-				this.buttonLayout.runAction(layoutMoveTo);
-			}
-			this.gameStart = true;
-			this.initInnerChain(GlobalData.TimeActionParam.StartGameMoveTime);
-		}else{
-			this.node.active = true;
-			this.scoreLabel.active = true;
-			this.kingSprite.active = true;
-			this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
-			//logo 效果设置
-			var logoMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.logoPos);
-			this.gameLogo.runAction(logoMoveTo);
-			//开始效果设置
-			var startMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.startPos);
-			this.startButton.runAction(startMoveTo);
-			//挑战效果设置
-			if(this.battleButton.active == true){
-				var battleMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.battlePos);
-				this.battleButton.runAction(battleMoveTo);
-			}
-			//分享，排行，声音效果设置
-			if(this.buttonLayout.active == true){
-				var layoutMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,this.layoutPos);
-				this.buttonLayout.runAction(layoutMoveTo);
-			}
-			this.initInnerChain(GlobalData.TimeActionParam.StartGameMoveTime);
+		this.scoreLabel.active = true;
+		this.kingSprite.active = true;
+		this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
+		this.slideIn(this.gameLogo,'UP');
+		this.slideIn(this.startButton,'LEFT');
+		if(this.battleButton.active == true){
+			this.slideIn(this.battleButton,'RIGHT');
 		}
+		//分享，排行，声音效果设置
+		if(this.buttonLayout.active == true){
+			this.slideIn(this.buttonLayout,'DOWN');
+		}
+		this.initInnerChain(GlobalData.TimeActionParam.StartGameMoveTime);
 	},
 	hideStaticStart(callBack){
 		var self = this;
@@ -250,28 +286,6 @@ cc.Class({
 		}else{
 			this.battleButton.active = false;
 		}
-		//logo 效果设置
-		var logoPos = this.gameLogo.getPosition();
-		var logoSize = this.gameLogo.getContentSize();
-		var logoY = winSize.height/2 + logoSize.height/2;
-		this.gameLogo.setPosition(cc.v2(logoPos.x,logoY));
-		//开始效果设置
-		var startPos = this.startButton.getPosition();
-		var startSize = this.startButton.getContentSize();
-		var startX = (startSize.width/2 + winSize.width/2) * -1;
-		this.startButton.setPosition(cc.v2(startX,startPos.y));
-		//挑战效果设置
-		var battlePos = this.battleButton.getPosition();
-		var battleSize = this.battleButton.getContentSize();
-		var battleX = (battleSize.width/2 + winSize.width/2);
-		this.battleButton.setPosition(cc.v2(battleX,battlePos.y));
-
-		//分享，排行，声音效果设置
-		var layoutPos = this.buttonLayout.getPosition();
-		var layoutSize = this.buttonLayout.getContentSize();
-		var layoutY = (winSize.height/2 + logoSize.height/2) * -1;
-		this.buttonLayout.setPosition(cc.v2(layoutPos.x,layoutY));
-		
 		var hideAction = cc.callFunc(function(){
 			self.scoreLabel.active = false;
 			self.kingSprite.active = false;
@@ -294,37 +308,22 @@ cc.Class({
 			this.battleButton.active = false;
 		}
 		//logo 效果设置
-		var logoPos = this.gameLogo.getPosition();
-		var logoSize = this.gameLogo.getContentSize();
-		var logoY = winSize.height/2 + logoSize.height/2;
-		var logoMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(logoPos.x,logoY));
-		this.gameLogo.runAction(logoMoveTo);
+		this.slideOut(this.gameLogo,'UP');
 		//开始效果设置
-		var startPos = this.startButton.getPosition();
-		var startSize = this.startButton.getContentSize();
-		var startX = (startSize.width/2 + winSize.width/2) * -1;
-		var startMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(startX,startPos.y));
-		this.startButton.runAction(startMoveTo);
+		this.slideOut(this.startButton,'LEFT');
 		//挑战效果设置
 		if(this.battleButton.active == true){
-			var battlePos = this.battleButton.getPosition();
-			var battleSize = this.battleButton.getContentSize();
-			var battleX = (battleSize.width/2 + winSize.width/2);
-			var battleMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(battleX,battlePos.y));
-			this.battleButton.runAction(battleMoveTo);
+			this.slideOut(this.battleButton,'RIGHT');
 		}
 		//分享，排行，声音效果设置
 		if(this.buttonLayout.active == true){
-			var layoutPos = this.buttonLayout.getPosition();
-			var layoutSize = this.buttonLayout.getContentSize();
-			var layoutY = (winSize.height/2 + logoSize.height/2) * -1;
-			var layoutMoveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(layoutPos.x,layoutY));
-			this.buttonLayout.runAction(layoutMoveTo);
+			this.slideOut(this.buttonLayout,'DOWN');
 		}
 		var hideAction = cc.callFunc(function(){
 			self.scoreLabel.active = false;
 			self.kingSprite.active = false;
 			self.node.active = false;
+			self.resetPos();
 			callBack();
 		},this);
 		if(this.node.active == true){
@@ -333,6 +332,7 @@ cc.Class({
 				hideAction
 			));
 		}else{
+			this.resetPos();
 			callBack();
 		}
 	},

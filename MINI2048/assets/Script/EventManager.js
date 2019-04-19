@@ -1,7 +1,8 @@
 var EventManager = {
 	eventType:{
 		GameEvent:'game-event',
-		PressEvent:'press-event'
+		PressEvent:'press-event',
+		GameLogic:'game-logic'
 	},
 	on:function(func,pthis){
 		cc.director.on(this.eventType.GameEvent,func,pthis);
@@ -20,6 +21,15 @@ var EventManager = {
 	},
 	emitPress:function(data){
 		cc.director.emit(this.eventType.PressEvent,data);
+	},
+	onLogic:function(func,pthis){
+		cc.director.on(this.eventType.GameLogic,func,pthis);
+	},
+	emitLogic:function(data){
+		cc.director.emit(this.eventType.GameLogic,data);
+	},
+	offLogic:function(func,pthis){
+		cc.director.off(this.eventType.GameLogic,func,pthis);
 	}
 };
 module.exports = EventManager;

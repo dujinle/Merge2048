@@ -361,10 +361,10 @@ GlobalData = {
 			PropAV:1,
 			PropShare:1,
 			PropRelive:3,
-			PropBattle:3,
+			PropBattle:1,
 			PropInner:2,
 			PropLocker:2,
-			StartMenu:2
+			StartMenu:1
 		},
 		PropReliveRate:{
 			3:1,

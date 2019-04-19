@@ -6,18 +6,23 @@ cc.Class({
     properties: {
 		rankSprite:cc.Node,
 		isDraw:false,
+		scoreLabel:cc.Node,
+		maxScoreLabel:cc.Node,
+		upLabel:cc.Node,
 		openSprite:cc.Node,
-		innerChainNode:cc.Node,
+		//innerChainNode:cc.Node,
     },
     onLoad () {
 		console.log("finish game board load");
 	},
 	start(){
+		/*
 		try{
 			this.texture = new cc.Texture2D();
 			var openDataContext = wx.getOpenDataContext();
 			this.sharedCanvas = openDataContext.canvas;
 		}catch(error){}
+		*/
 	},
 	initInnerChain(time){
 		var self = this;
@@ -34,13 +39,17 @@ cc.Class({
 	},
 	show(){
 		console.log("finish game show");
-		this.isDraw = true;
-		this.initInnerChain(0);
+		this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.totalScore;
+		this.maxScoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
+		//this.isDraw = true;
+		//this.initInnerChain(0);
 		//this.node.active = true;
+		/*
 		var param = {
 			type:'gameOverUIRank'
 		};
 		ThirdAPI.getRank(param);
+		*/
 	},
 	hide(){
 		this.isDraw = false;
@@ -50,7 +59,10 @@ cc.Class({
 		EventManager.emit({type:'RankView'});
 	},
 	restartButtonCb(){
-		EventManager.emit({type:'FRestart'});
+		EventManager.emitLogic({type:'FinishRestart'});
+	},
+	goHomeButtonCb(){
+		EventManager.emitLogic({type:'FinishGoHome'});
 	},
 	shareToFriends(){
 		var param = {

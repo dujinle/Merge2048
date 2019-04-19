@@ -41,7 +41,7 @@ cc.Class({
 			ThirdAPI.shareGame(param);
 		}else if(this.openType == "PropAV"){
 			this.AVSuccessCb = function(arg){
-				EventManager.emit({type:'ReliveBack',action:this.action});
+				EventManager.emitLogic({type:'ReliveBack',action:this.action});
 			};
 			this.AVFailedCb = function(arg){
 				if(arg == 'cancle'){
@@ -56,42 +56,11 @@ cc.Class({
 	},
 	cancleButtonCb(){
 		this.callback();
-		/*
-		try{
-			this.unschedule(this.loadUpdate);
-			var self = this;
-			var content = '求助好友可继续游戏，要求助吗？';
-			var confirmText = '原地复活';
-			var cancelText = '放弃求助'
-			if(this.openType == 'PropAV'){
-				content = '观看视频可继续游戏，要观看吗？';
-				confirmText = '视频复活';
-				cancelText = '放弃复活';
-			}
-			wx.showModal({
-				title:'复活',
-				content:content,
-				cancelText:cancelText,
-				confirmText:confirmText,
-				confirmColor:'#53679c',
-				success(res){
-					if (res.confirm) {
-						self.continueNow(null);
-					}else if(res.cancel){
-						//self.schedule(self.loadUpdate,1);
-						self.callback();
-						self.node.removeFromParent();
-						self.node.destroy();
-					}
-				}
-			});
-		}catch(err){}
-		*/
 	},
 	shareSuccessCb(type, shareTicket, arg){
 		if(this.iscallBack == false){
 			console.log(type, shareTicket, arg);
-			EventManager.emit({type:'ReliveBack',action:this.action});
+			EventManager.emitLogic({type:'ReliveBack',action:this.action});
 		}
 		this.iscallBack = true;
 	},

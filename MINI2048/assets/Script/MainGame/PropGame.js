@@ -52,7 +52,7 @@ cc.Class({
 		}else if(this.openType == "PropAV"){
 			console.log(this.openType);
 			this.AVSuccessCb = function(arg){
-				EventManager.emit({
+				EventManager.emitLogic({
 					type:'PropShareSuccess',
 					propKey:'PropBomb',
 					startPos:cc.v2(0,0)
@@ -72,7 +72,7 @@ cc.Class({
 	shareSuccessCb(type, shareTicket, arg){
 		if(this.iscallBack == false){
 			console.log(type, shareTicket, arg);
-			EventManager.emit({type:'PropShareSuccess',propKey:this.propKey,startPos:this.startPos});
+			EventManager.emitLogic({type:'PropShareSuccess',propKey:this.propKey,startPos:this.startPos});
 		}
 		this.iscallBack = true;
 	},
@@ -129,7 +129,6 @@ cc.Class({
 		}
 	},
 	cancel(){
-		EventManager.emit({type:'PropGameCancle'});
 		this.node.removeFromParent();
 		this.node.destroy();
 	}

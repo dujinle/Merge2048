@@ -7,79 +7,101 @@
 			<key>chestTitle.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{1,1},{537,68}}</string>
-				<key>offset</key>
-				<string>{0,0}</string>
-				<key>rotated</key>
-				<false />
-				<key>sourceSize</key>
-				<string>{537,68}</string>
-			</dict>
-			<key>cutLine.png</key>
-			<dict>
-				<key>frame</key>
-				<string>{{896,1},{580,8}}</string>
+				<string>{{0,1671},{167,61}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<true />
 				<key>sourceSize</key>
-				<string>{580,8}</string>
+				<string>{167,61}</string>
+			</dict>
+			<key>cutLine.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,1925},{591,6}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{591,6}</string>
 			</dict>
 			<key>rank_1.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{906,1},{27,21}}</string>
+				<string>{{0,1931},{43,57}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{27,21}</string>
+				<string>{43,57}</string>
 			</dict>
 			<key>rank_2.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{935,1},{27,21}}</string>
+				<string>{{0,1988},{43,57}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{27,21}</string>
+				<string>{43,57}</string>
 			</dict>
 			<key>rank_3.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{964,1},{27,21}}</string>
+				<string>{{43,1931},{43,57}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{27,21}</string>
+				<string>{43,57}</string>
 			</dict>
-			<key>rank_board2.png</key>
+			<key>rankBg.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{540,1},{176,176}}</string>
+				<string>{{0,1136},{358,192}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{358,192}</string>
+			</dict>
+			<key>startBg.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,0},{640,1136}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{176,176}</string>
+				<string>{640,1136}</string>
 			</dict>
 			<key>surpassBoard.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{718,1},{176,87}}</string>
+				<string>{{0,1494},{177,89}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<true />
+				<key>sourceSize</key>
+				<string>{177,89}</string>
+			</dict>
+			<key>surpassCircle.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,1838},{76,87}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false />
 				<key>sourceSize</key>
-				<string>{176,87}</string>
+				<string>{76,87}</string>
 			</dict>
 		</dict>
 		<key>metadata</key>
@@ -87,18 +109,18 @@
 			<key>format</key>
 			<integer>2</integer>
 			<key>textureFileName</key>
-			<string>OpenDataPlist.png</string>
+			<string>openDataPlist.png</string>
 			<key>realTextureFileName</key>
-			<string>OpenDataPlist.png</string>
+			<string>openDataPlist.png</string>
 			<key>size</key>
-			<string>{992,582}</string>
+			<string>{640,2045}</string>
 		</dict>
 		<key>texture</key>
 		<dict>
 			<key>width</key>
-			<integer>992</integer>
+			<integer>640</integer>
 			<key>height</key>
-			<integer>582</integer>
+			<integer>2045</integer>
 		</dict>
 	</dict>
 </plist>

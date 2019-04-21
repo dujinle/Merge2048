@@ -7,7 +7,7 @@ cc.Class({
 		aboveGameView:cc.Node,
     },
 	onLoad(){
-		//this.setViewVisiable(null);
+		this.setViewVisiable(null);
 	},
     start () {
         wx.onMessage(data => {

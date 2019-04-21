@@ -20,8 +20,8 @@ let ThirdAPI = {
 			if(storage != null && storage != ""){
 				let localData = JSON.parse(storage);
                 //兼容新添加的数据
-				util.updateObj(GlobalData,localData,GlobalData.cdnCopyKeys);
-				console.log('loadLocalData',GlobalData);
+				util.updateObj(GData,localData,GData.cdnCopyKeys);
+				console.log('loadLocalData',GData);
             }
         } catch (error) {
 			console.log(error);
@@ -29,17 +29,17 @@ let ThirdAPI = {
     },
     loadCDNData:function(callback){
 		try{
-			wx.cloud.init({ env:'test-b1697d'});
+			wx.cloud.init({ env:'merge2048-8c2e5d'});
 			const db = wx.cloud.database()
-			db.collection('MINI2048').where({
-				FileName:GlobalData.cdnFileDefaultPath
+			db.collection('2048').where({
+				FileName:GData.cdnFileDefaultPath
 			}).get({
 				success(res) {
 					// res.data 包含该记录的数据
-					console.log(res.data);
+					console.log('loadCDNData',res.data);
 					if(res.data.length > 0){
 						var data = res.data[0];
-						util.updateObj(GlobalData,data,GlobalData.cdnCopyKeys);
+						util.updateObj(GData,data,GData.cdnCopyKeys);
 						if(callback){
 							callback();
 						}
@@ -61,9 +61,9 @@ let ThirdAPI = {
         //云端数据再存储一份在本地
         try {
 			var dataDic = {
-				"gameRunTimeParam":GlobalData.gameRunTimeParam,
-				"numMap":GlobalData.numMap,
-				"GamePropParam":GlobalData.GamePropParam
+				"GRunTimeParam":GData.GRunTimeParam,
+				"numMap":GData.numMap,
+				"GamePropParam":GData.GamePropParam
 			};
 			console.log('updataGameInfo',dataDic);
             let data = JSON.stringify(dataDic);

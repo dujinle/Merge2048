@@ -18,7 +18,7 @@ cc.Class({
 		//异步加载动态数据
 		this.rate = 0;
 		this.resLength = 6;
-		GlobalData.assets = {};
+		GData.assets = {};
 		var self = this;
 		this.loadUpdate = function(){
 			console.log("this.rate:" + self.rate);
@@ -31,13 +31,13 @@ cc.Class({
 		cc.loader.loadRes("dynamicPlist", cc.SpriteAtlas, function (err, atlas) {
 			for(var key in atlas._spriteFrames){
 				console.log("load res :" + key);
-				GlobalData.assets[key] = atlas._spriteFrames[key];
+				GData.assets[key] = atlas._spriteFrames[key];
 			}
 			self.rate = self.rate + 1;
 		});
 		cc.loader.loadResDir("initPrefabs",function (err, assets) {
 			for(var i = 0;i < assets.length;i++){
-				GlobalData.assets[assets[i].name] = assets[i];
+				GData.assets[assets[i].name] = assets[i];
 				self.rate = self.rate + 1;
 				if(assets[i].name == 'PBAudioSources'){
 					self.voiceManager = cc.instantiate(assets[i]);
@@ -46,7 +46,7 @@ cc.Class({
 			}
 		});
 		this.schedule(this.loadUpdate,0.1);
-		GlobalData.gameRunTimeParam.juNum = 1;
+		GData.GRunTimeParam.juNum = 1;
 		ThirdAPI.loadLocalData();
 		
 	},
@@ -54,55 +54,54 @@ cc.Class({
 		//加载游戏开始界面
 		this.mainGame.getComponent("MainGame").initLoad();
 		this.startGame.getComponent("StartGame").showStart();
-		/*
+
 		var self = this;
 		ThirdAPI.loadCDNData(function(){
 			self.startGame.getComponent("StartGame").refreshGame();
 		});
-		*/
 		
 		EventManager.on(this.gameUIControll,this);
 		EventManager.onPress(this.propPressCallBack,this);
 		EventManager.onLogic(this.gameLogicControll,this);
     },
 	showPBGameBoard(pnode,type){
-		var scene = GlobalData.gameSceneDic[type];
+		var scene = GData.gameSceneDic[type];
 		if(scene != null){
-			if(GlobalData.assets[type] != null){
-				var sceneNode = cc.instantiate(GlobalData.assets[type]);
+			if(GData.assets[type] != null){
+				var sceneNode = cc.instantiate(GData.assets[type]);
 				pnode.addChild(sceneNode);
 				sceneNode.setPosition(cc.v2(0,0));
 				sceneNode.getComponent(scene[1]).show();
-				GlobalData.gameRunTimeScene[type] = sceneNode;
+				GData.gameRunTimeScene[type] = sceneNode;
 			}else{
 				cc.loader.loadRes(scene[0], function (err, prefab) {
-					GlobalData.assets[type] = prefab;
+					GData.assets[type] = prefab;
 					var sceneNode = cc.instantiate(prefab);
 					pnode.addChild(sceneNode);
 					sceneNode.setPosition(cc.v2(0,0));
 					sceneNode.getComponent(scene[1]).show();
-					GlobalData.gameRunTimeScene[type] = sceneNode;
+					GData.gameRunTimeScene[type] = sceneNode;
 				});
 			}
 		}
 	},
 	
 	creatPBGameBoard(pnode,type,cb){
-		var scene = GlobalData.gameSceneDic[type];
+		var scene = GData.gameSceneDic[type];
 		if(scene != null){
-			if(GlobalData.assets[type] != null){
-				var sceneNode = cc.instantiate(GlobalData.assets[type]);
+			if(GData.assets[type] != null){
+				var sceneNode = cc.instantiate(GData.assets[type]);
 				pnode.addChild(sceneNode);
 				sceneNode.setPosition(cc.v2(0,0));
-				GlobalData.gameRunTimeScene[type] = sceneNode;
+				GData.gameRunTimeScene[type] = sceneNode;
 				cb(sceneNode);
 			}else{
 				cc.loader.loadRes(scene[0], function (err, prefab) {
-					GlobalData.assets[type] = prefab;
+					GData.assets[type] = prefab;
 					var sceneNode = cc.instantiate(prefab);
 					pnode.addChild(sceneNode);
 					sceneNode.setPosition(cc.v2(0,0));
-					GlobalData.gameRunTimeScene[type] = sceneNode;
+					GData.gameRunTimeScene[type] = sceneNode;
 					cb(sceneNode);
 				});
 			}
@@ -110,12 +109,12 @@ cc.Class({
 	},
 	
 	destroyGameBoard(type){
-		var board = GlobalData.gameRunTimeScene[type];
+		var board = GData.gameRunTimeScene[type];
 		if(board != null){
 			board.stopAllActions();
 			board.removeFromParent();
 			board.destroy();
-			GlobalData.gameRunTimeScene[type] = null;
+			GData.gameRunTimeScene[type] = null;
 		}
 		return null;
 	},
@@ -128,10 +127,10 @@ cc.Class({
 			return;
 		}else if(data.type == 'BombCancle'){
 			this.destroyGameBoard('PBBombGuide');
-			this.mainGame.getComponent('MainGame').propBombAction(GlobalData.gameRunTimeParam.lastFreshNum);
-			GlobalData.GamePropParam.useNum['PropBomb'] -= 1;
-			GlobalData.GamePropParam.bagNum['PropBomb'] += 1;
-			this.mainGame.getComponent('MainGame').propFreshNum('PropBomb');
+			this.mainGame.getComponent('MainGame').propBombAction(GData.GRunTimeParam.lastFreshNum);
+			GData.GamePropParam.useNum['DJBomb'] -= 1;
+			GData.GamePropParam.bagNum['DJBomb'] += 1;
+			this.mainGame.getComponent('MainGame').propFreshNum('DJBomb');
 			WxBannerAd.showBannerAd();
 			return;
 		}
@@ -144,11 +143,11 @@ cc.Class({
 		//var data = event.getUserData();
 		console.log('dispatchMyEvent',data);
 		if(data.type != 'ReliveBack' && data.type != 'PropShareSuccess'){
-			this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+			this.voiceManager.getComponent("AudioManager").play(GData.AudioParam.AudioButton);
 		}
 		if(data.type == 'RankView'){
 			WxBannerAd.hideBannerAd();
-			var finishGameBoard = GlobalData.gameRunTimeScene['PBFinishGameBoard'];
+			var finishGameBoard = GData.gameRunTimeScene['PBFinishGameBoard'];
 			if(finishGameBoard != null){
 				finishGameBoard.getComponent("FinishGame").isDraw = false;
 			}
@@ -181,7 +180,7 @@ cc.Class({
 		}
 		/*
 		else if(data.type == 'PropGameCancle'){
-			var finishGameBoard = GlobalData.gameRunTimeScene['PBFinishGameBoard'];
+			var finishGameBoard = GData.gameRunTimeScene['PBFinishGameBoard'];
 			if(finishGameBoard != null){
 				WxBannerAd.showBannerAd();
 			}
@@ -190,9 +189,9 @@ cc.Class({
 	},
     gameLogicControll(data){
 		var self = this;
-		this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+		this.voiceManager.getComponent("AudioManager").play(GData.AudioParam.AudioButton);
 		if(data.type == 'StartGame'){
-			if(GlobalData.gameRunTimeParam.gameStatus == 1){
+			if(GData.GRunTimeParam.gameStatus == 1){
 				this.showPBGameBoard(this.node,'PBContinueGameBoard');
 			}else{
 				var propRelive = PropManager.getPropStart();
@@ -228,7 +227,7 @@ cc.Class({
 			});
 		}
 		if(data.type == "PauseContinue"){
-			var pauseGameBoard = GlobalData.gameRunTimeScene['PBPauseGameBoard'];
+			var pauseGameBoard = GData.gameRunTimeScene['PBPauseGameBoard'];
 			pauseGameBoard.getComponent("PauseGame").hidePause(function(){
 				self.destroyGameBoard('PBPauseGameBoard');
 			});
@@ -243,7 +242,7 @@ cc.Class({
 		}
 		if(data.type == "PauseGoHome"){
 			WxBannerAd.hideBannerAd();
-			var pauseGameBoard = GlobalData.gameRunTimeScene['PBPauseGameBoard'];
+			var pauseGameBoard = GData.gameRunTimeScene['PBPauseGameBoard'];
 			pauseGameBoard.getComponent("PauseGame").hidePause(function(){
 				self.destroyGameBoard('PBPauseGameBoard');
 				self.mainGame.getComponent('MainGame').exitGame(false);
@@ -254,7 +253,7 @@ cc.Class({
 		}
 		if(data.type == 'PauseRestart'){
 			WxBannerAd.hideBannerAd();
-			var pauseGameBoard = GlobalData.gameRunTimeScene['PBPauseGameBoard'];
+			var pauseGameBoard = GData.gameRunTimeScene['PBPauseGameBoard'];
 			pauseGameBoard.getComponent("PauseGame").hidePause(function(){
 				self.destroyGameBoard('PBPauseGameBoard');
 				self.mainGame.getComponent('MainGame').reStartGame();
@@ -263,7 +262,7 @@ cc.Class({
 		if(data.type == 'FinishRestart'){
 			this.destroyGameBoard('PBFinishGameBoard');
 			this.mainGame.getComponent('MainGame').reStartGame();
-			GlobalData.gameRunTimeParam.juNum += 1;
+			GData.GRunTimeParam.juNum += 1;
 			ThirdAPI.updataGameInfo();
 		}
 		if(data.type == 'PropShareSuccess'){
@@ -271,8 +270,8 @@ cc.Class({
 			self.mainGame.getComponent('MainGame').getPropGameProp(data);
 		}
 		if(data.type == 'ReliveBack'){
-			GlobalData.GamePropParam.bagNum.PropRelive -= 1;
-			GlobalData.GamePropParam.useNum.PropRelive += 1;
+			GData.GamePropParam.bagNum.DJRelive -= 1;
+			GData.GamePropParam.useNum.DJRelive += 1;
 			this.destroyGameBoard('PBReliveGameBoard');
 			if(data.action == 1){
 				this.mainGame.getComponent('MainGame').ReliveBack(data.action);

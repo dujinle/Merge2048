@@ -30,9 +30,9 @@ cc.Class({
     },
     onLoad () {
 		this.propConfig = {
-			'PropFresh':'',
-			'PropHammer':'',
-			'PropBomb':''
+			'DJFresh':'',
+			'DJHammer':'',
+			'DJBomb':''
 		};
 		this.exitType = false;
 	},
@@ -41,7 +41,7 @@ cc.Class({
 		this.battleNode.getComponent('BattleNode').hide();
 		this.clearGame();
 		this.initLoad();
-		GlobalData.gameRunTimeParam.gameStatus = 0;
+		GData.GRunTimeParam.gameStatus = 0;
 		this.exitType = flag;
 	},
 	startGame(){
@@ -62,21 +62,21 @@ cc.Class({
 			this.boardItem.destroy();
 			this.boardItem = null;
 			this.propBombAction(2048);
-			if(GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq] != 0){
-				GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq].removeFromParent();
-				GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq].destroy();
-				GlobalData.numMap[GlobalData.gameRunTimeParam.lastSq] = 0;
-				GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq] = 0;
+			if(GData.numNodeMap[GData.GRunTimeParam.lastSq] != 0){
+				GData.numNodeMap[GData.GRunTimeParam.lastSq].removeFromParent();
+				GData.numNodeMap[GData.GRunTimeParam.lastSq].destroy();
+				GData.numMap[GData.GRunTimeParam.lastSq] = 0;
+				GData.numNodeMap[GData.GRunTimeParam.lastSq] = 0;
 			}
-			GlobalData.gameRunTimeParam.gameStatus = 1;
+			GData.GRunTimeParam.gameStatus = 1;
 		}else{
 			this.resumeGameMap();
-			if(GlobalData.gameRunTimeParam.lastSq != 0){
-				if(GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq] != 0){
-					GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq].removeFromParent();
-					GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq].destroy();
-					GlobalData.numMap[GlobalData.gameRunTimeParam.lastSq] = 0;
-					GlobalData.numNodeMap[GlobalData.gameRunTimeParam.lastSq] = 0;
+			if(GData.GRunTimeParam.lastSq != 0){
+				if(GData.numNodeMap[GData.GRunTimeParam.lastSq] != 0){
+					GData.numNodeMap[GData.GRunTimeParam.lastSq].removeFromParent();
+					GData.numNodeMap[GData.GRunTimeParam.lastSq].destroy();
+					GData.numMap[GData.GRunTimeParam.lastSq] = 0;
+					GData.numNodeMap[GData.GRunTimeParam.lastSq] = 0;
 				}
 			}
 			this.enterGame();
@@ -111,19 +111,19 @@ cc.Class({
 	//如果继续游戏则绘制上次的盘局信息
 	resumeGameMap(){
 		var blocksBoardPos = this.blocksBoard.getPosition();
-		for(var i = GlobalData.RANK_TOP;i < 6;i++){
-			for(var j = GlobalData.FILE_LEFT;j < 6;j++){
-				var sq = GlobalData.COORD_XY(i,j);
-				if(GlobalData.numMap[sq] != 0){
-					var blockIdx = GlobalData.ConvertToMapId(sq);
-					var item = cc.instantiate(GlobalData.assets["PBNumObject"]);
-					item.getComponent("NumObject").onInit(GlobalData.numMap[sq]);
+		for(var i = GData.RANK_TOP;i < 6;i++){
+			for(var j = GData.FILE_LEFT;j < 6;j++){
+				var sq = GData.COORD_XY(i,j);
+				if(GData.numMap[sq] != 0){
+					var blockIdx = GData.ConvertToMapId(sq);
+					var item = cc.instantiate(GData.assets["PBNumObject"]);
+					item.getComponent("NumObject").onInit(GData.numMap[sq]);
 					this.node.addChild(item);
 					var blockPos = this.blocksBoard.children[blockIdx].getPosition();
 					blockPos.x = blockPos.x + blocksBoardPos.x;
 					blockPos.y = blockPos.y + blocksBoardPos.y;
 					item.setPosition(cc.v2(blockPos.x,blockPos.y - 3));
-					GlobalData.numNodeMap[sq] = item;
+					GData.numNodeMap[sq] = item;
 				}
 			}
 		}
@@ -132,65 +132,65 @@ cc.Class({
 			this.boardItem.destroy();
 			this.boardItem = null;
 		}
-		this.headNode.getComponent('HeadScore').initCurrentScore(GlobalData.gameRunTimeParam.totalScore);
-		this.propFreshNum('PropFresh');
-		this.propFreshNum('PropBomb');
-		this.propFreshNum('PropHammer');
+		this.headNode.getComponent('HeadScore').initCurrentScore(GData.GRunTimeParam.totalScore);
+		this.propFreshNum('DJFresh');
+		this.propFreshNum('DJBomb');
+		this.propFreshNum('DJHammer');
 	},
 	gamePropButtonCb(event, customEventData){
 		console.log("gamePropButtonCb",customEventData);
 		this.stopRotateProp();
-		if(customEventData == "PropFresh"){
+		if(customEventData == "DJFresh"){
 			//判断是否超过使用上限
 			var propBag = PropManager.getPropBag(customEventData);
 			if(propBag.useNum >= 0){
-				if(GlobalData.GamePropParam.useNum[customEventData] >= propBag.useNum){
+				if(GData.GamePropParam.useNum[customEventData] >= propBag.useNum){
 					return;
 				}
 			}
 			//判断是否有道具可以使用
-			if(GlobalData.GamePropParam.bagNum[customEventData] <= 0){
+			if(GData.GamePropParam.bagNum[customEventData] <= 0){
 				return;
 			}
-			GlobalData.GamePropParam.useNum[customEventData] += 1;
-			GlobalData.GamePropParam.bagNum[customEventData] -= 1;
+			GData.GamePropParam.useNum[customEventData] += 1;
+			GData.GamePropParam.bagNum[customEventData] -= 1;
 			this.propFreshNum(customEventData);
 			//1 进行概率的有效数字
 			this.refeshNumObject(true,1);
-		}else if(customEventData == "PropHammer"){
+		}else if(customEventData == "DJHammer"){
 			//判断是否超过使用上限
 			var propBag = PropManager.getPropBag(customEventData);
 			if(propBag.useNum >= 0){
-				if(GlobalData.GamePropParam.useNum[customEventData] >= propBag.useNum){
+				if(GData.GamePropParam.useNum[customEventData] >= propBag.useNum){
 					return;
 				}
 			}
 			//判断是否有道具可以使用
-			if(GlobalData.GamePropParam.bagNum[customEventData] <= 0){
+			if(GData.GamePropParam.bagNum[customEventData] <= 0){
 				//道具没有了点击跳出分享界面获取道具
 				this.getShareProp(customEventData,this.propConfig[customEventData]);
 				return;
 			}
 			EventManager.emit({type:'OpenHammerGuide'});
 			WxBannerAd.hideBannerAd();
-		}else if(customEventData == "PropBomb"){
+		}else if(customEventData == "DJBomb"){
 			//判断是否超过使用上限
 			var propBag = PropManager.getPropBag(customEventData);
 			if(propBag.useNum >= 0){
-				if(GlobalData.GamePropParam.useNum[customEventData] >= propBag.useNum){
+				if(GData.GamePropParam.useNum[customEventData] >= propBag.useNum){
 					return;
 				}
 			}
 			//判断是否有道具可以使用
-			if(GlobalData.GamePropParam.bagNum[customEventData] <= 0){
+			if(GData.GamePropParam.bagNum[customEventData] <= 0){
 				//道具没有了点击跳出分享界面获取道具
 				this.getShareProp(customEventData,this.propConfig[customEventData]);
 				return;
 			}
 			EventManager.emit({type:'OpenBombGuide'});
 			
-			GlobalData.GamePropParam.useNum[customEventData] += 1;
-			GlobalData.GamePropParam.bagNum[customEventData] -= 1;
+			GData.GamePropParam.useNum[customEventData] += 1;
+			GData.GamePropParam.bagNum[customEventData] -= 1;
 			this.propFreshNum(customEventData);
 			this.propBombAction(2048);
 			WxBannerAd.hideBannerAd();
@@ -198,23 +198,23 @@ cc.Class({
 	},
 	clearGame(){
 		//初始化矩阵信息
-		for(var i = GlobalData.RANK_TOP;i < 6;i++){
-			for(var j = GlobalData.FILE_LEFT;j < 6;j++){
-				var sq = GlobalData.COORD_XY(i,j);
-				//console.log(sq,GlobalData.numMap[sq]);                                                                    
-				if(GlobalData.numNodeMap[sq] != 0){
-					GlobalData.numNodeMap[sq].removeFromParent();
-					GlobalData.numNodeMap[sq].destroy();
+		for(var i = GData.RANK_TOP;i < 6;i++){
+			for(var j = GData.FILE_LEFT;j < 6;j++){
+				var sq = GData.COORD_XY(i,j);
+				//console.log(sq,GData.numMap[sq]);                                                                    
+				if(GData.numNodeMap[sq] != 0){
+					GData.numNodeMap[sq].removeFromParent();
+					GData.numNodeMap[sq].destroy();
 				}
-				GlobalData.numNodeMap[sq] = 0;
-				GlobalData.numMap[sq] = 0;
+				GData.numNodeMap[sq] = 0;
+				GData.numMap[sq] = 0;
 			}
 		}
 		for(var i = 0;i < this.blocksBoard.children.length;i++){
 			this.blocksBoard.children[i].getComponent("BlockBoard").shadowShow(false);
 		}
-		for(var key in GlobalData.gameRunTimeScene){
-			if(GlobalData.gameRunTimeScene[key] != null){
+		for(var key in GData.gameRunTimeScene){
+			if(GData.gameRunTimeScene[key] != null){
 				this.destroyGameBoard(key);
 			}
 		}
@@ -226,25 +226,25 @@ cc.Class({
 		this.nodePool.clear();
 		//清楚运行时数据
 		this.stopRotateProp();
-		//GlobalData.gameRunTimeParam.gameStatus = 0;
-		GlobalData.gameRunTimeParam.totalScore = 0;
-		GlobalData.gameRunTimeParam.stepNum = 0;
-		GlobalData.gameRunTimeParam.lastSq = 0;
-		GlobalData.gameRunTimeParam.lastFreshNum = 0;
-		GlobalData.gameRunTimeParam.shareTimes = 0;
+		//GData.GRunTimeParam.gameStatus = 0;
+		GData.GRunTimeParam.totalScore = 0;
+		GData.GRunTimeParam.stepNum = 0;
+		GData.GRunTimeParam.lastSq = 0;
+		GData.GRunTimeParam.lastFreshNum = 0;
+		GData.GRunTimeParam.shareTimes = 0;
 		
-		GlobalData.GamePropParam.bagNum.PropFresh = 0;
-		GlobalData.GamePropParam.bagNum.PropHammer = 0;
-		GlobalData.GamePropParam.bagNum.PropBomb = 0;
-		GlobalData.GamePropParam.bagNum.PropRelive = 0;
-		GlobalData.GamePropParam.useNum.PropFresh = 0;
-		GlobalData.GamePropParam.useNum.PropHammer = 0;
-		GlobalData.GamePropParam.useNum.PropBomb = 0;
-		GlobalData.GamePropParam.useNum.PropRelive = 0;
+		GData.GamePropParam.bagNum.DJFresh = 0;
+		GData.GamePropParam.bagNum.DJHammer = 0;
+		GData.GamePropParam.bagNum.DJBomb = 0;
+		GData.GamePropParam.bagNum.DJRelive = 0;
+		GData.GamePropParam.useNum.DJFresh = 0;
+		GData.GamePropParam.useNum.DJHammer = 0;
+		GData.GamePropParam.useNum.DJBomb = 0;
+		GData.GamePropParam.useNum.DJRelive = 0;
 		this.headNode.getComponent('HeadScore').initData();
-		this.propFreshNum('PropFresh');
-		this.propFreshNum('PropBomb');
-		this.propFreshNum('PropHammer');
+		this.propFreshNum('DJFresh');
+		this.propFreshNum('DJBomb');
+		this.propFreshNum('DJHammer');
 	},
 	//开始初始化主游戏界面信息
 	enterGame(){
@@ -254,26 +254,26 @@ cc.Class({
 		this.headNode.active = true;
 		this.headNode.getComponent('HeadScore').initData();
 		//道具解锁操作
-		console.log("局数",GlobalData.gameRunTimeParam.juNum);
-		if(GlobalData.cdnPropParam.PropUnLock.PropFresh <= GlobalData.gameRunTimeParam.juNum){
+		console.log("局数",GData.GRunTimeParam.juNum);
+		if(GData.cdnPropParam.PropUnLock.DJFresh <= GData.GRunTimeParam.juNum){
 			this.gamePropFresh.active = true;
 		}
-		if(GlobalData.cdnPropParam.PropUnLock.PropBomb <= GlobalData.gameRunTimeParam.juNum){
+		if(GData.cdnPropParam.PropUnLock.DJBomb <= GData.GRunTimeParam.juNum){
 			this.gamePropBomb.active = true;
 		}
-		if(GlobalData.cdnPropParam.PropUnLock.PropHammer <= GlobalData.gameRunTimeParam.juNum){
+		if(GData.cdnPropParam.PropUnLock.DJHammer <= GData.GRunTimeParam.juNum){
 			this.gamePropClear.active = true;
 		}
 		this.blockBoard.active = true;
-		this.headNode.getComponent('HeadScore').initMaxScore(GlobalData.gameRunTimeParam.maxScore);
+		this.headNode.getComponent('HeadScore').initMaxScore(GData.GRunTimeParam.maxScore);
 		this.headNode.getComponent('HeadScore').initCurrentScore(0);
-		if(GlobalData.gameRunTimeParam.StartGuideFlag == false){
+		if(GData.GRunTimeParam.StartGuideFlag == false){
 			this.startGuideBoard();
 		}
-		GlobalData.gameRunTimeParam.gameStatus = 1;
+		GData.GRunTimeParam.gameStatus = 1;
 		//结束游戏正常的推出 在进入则游戏数 + 1
 		if(this.exitType == true){
-			GlobalData.gameRunTimeParam.juNum += 1;
+			GData.GRunTimeParam.juNum += 1;
 		}
 		ThirdAPI.updataGameInfo();
 		var params = {
@@ -283,7 +283,7 @@ cc.Class({
 		this.battleNode.getComponent('BattleNode').onStart();
 		//添加广告计算 最下面的节点位置所占的全屏比例 广告位置 不得超过这个节点
 		/*
-		if(GlobalData.cdnPropParam.PropUnLock['PropAD'] <= GlobalData.gameRunTimeParam.juNum){
+		if(GData.cdnPropParam.PropUnLock['PropAD'] <= GData.GRunTimeParam.juNum){
 			var sizeHeight = cc.winSize.height;
 			var blockBoardPos = this.blockBoard.getPosition();
 			//向下移 10个像素 不要挨得最下面的节点太近
@@ -294,14 +294,14 @@ cc.Class({
 		*/
 		this.refeshNumObject(false,0);
 		if(this.flyNode == null){
-			this.flyNode = cc.instantiate(GlobalData.assets["PBNumFly"]);
+			this.flyNode = cc.instantiate(GData.assets["PBNumFly"]);
 			this.flyNode.zIndex = 3;
 			this.node.addChild(this.flyNode);
 			this.flyNode.runAction(cc.fadeOut());
 		}
 	},
 	startGuideBoard(){
-		var guideNode = cc.instantiate(GlobalData.assets["PBGuideStart"]);
+		var guideNode = cc.instantiate(GData.assets["PBGuideStart"]);
 		this.node.addChild(guideNode);
 		guideNode.zIndex = 3;
 		guideNode.setPosition(cc.v2(0,0));
@@ -311,7 +311,7 @@ cc.Class({
 		blockPos.x = blockPos.x + blocksBoardPos.x;
 		blockPos.y = blockPos.y + blocksBoardPos.y;
 		guideNode.getComponent("GuideStart").showGuide(this.blockBoard.getPosition(),blockPos);
-		GlobalData.gameRunTimeParam.StartGuideFlag = true;
+		GData.GRunTimeParam.StartGuideFlag = true;
 	},
 	refeshNumObject(scaleFlag,enbaled){
 		console.log('refeshNumObject',scaleFlag,enbaled);
@@ -323,9 +323,9 @@ cc.Class({
 		//var test = [256,512,1024,2048];
 		//enbaled 0:随机 1:按钮概率 2:防死概率
 		var num = util.refreshOneNum(enbaled);
-		GlobalData.gameRunTimeParam.lastFreshNum = num;
+		GData.GRunTimeParam.lastFreshNum = num;
 		if(this.nodePool.size() <= 0){
-			this.boardItem = cc.instantiate(GlobalData.assets["PBNumObject"]);
+			this.boardItem = cc.instantiate(GData.assets["PBNumObject"]);
 		}else{
 			this.boardItem = this.nodePool.get();
 		}
@@ -341,7 +341,7 @@ cc.Class({
 		this.boardItem.on(cc.Node.EventType.TOUCH_MOVE, this.eventTouchMove,this);
 		this.boardItem.on(cc.Node.EventType.TOUCH_END, this.eventTouchEnd,this);
 		this.boardItem.on(cc.Node.EventType.TOUCH_CANCEL, this.eventTouchCancel,this);
-		console.log("refeshNumObject",num,GlobalData.gameRunTimeParam.stepNum,GlobalData.gameRunTimeParam.juNum);
+		console.log("refeshNumObject",num,GData.GRunTimeParam.stepNum,GData.GRunTimeParam.juNum);
 	},
 	offNodeAction(){
 		this.boardItem.off(cc.Node.EventType.TOUCH_START, this.eventTouchStart,this);
@@ -354,35 +354,35 @@ cc.Class({
 		var self = this;
 		var totalEatNum = 0;
 		var sameLevelWasteTime = 0;
-		var sq = GlobalData.ConvertToMapSpace(this.moveIdx);
-		var x = GlobalData.FILE_X(sq);
-		var y = GlobalData.RANK_Y(sq);
-		var myNum = GlobalData.numMap[sq];
+		var sq = GData.ConvertToMapSpace(this.moveIdx);
+		var x = GData.FILE_X(sq);
+		var y = GData.RANK_Y(sq);
+		var myNum = GData.numMap[sq];
 
-		var oriNode = GlobalData.numNodeMap[sq];
+		var oriNode = GData.numNodeMap[sq];
 		console.log("gameLogic start",sq,x,y,myNum);
 		//最多有四次组合[-1,1]
-		GlobalData.gameRunTimeParam.lastSq = sq;
+		GData.GRunTimeParam.lastSq = sq;
 		var eatNumLevel = new Array();
 		//查找并收集所有的可以合并的数字
 		for(let i = 0;i < 4;i++){
 			let numDic = {'key':myNum,'list':[],'eatNum':0};
-			for(let j = 0;j < GlobalData.moveStep.length;j++){
-				let step = GlobalData.moveStep[j];
-				let tsq = GlobalData.COORD_XY(x + step[0],y + step[1]);
-				//console.log("gameLogic",step,GlobalData.numMap[tsq],myNum,tsq);
-				if(GlobalData.numMap[tsq] == myNum){
-					numDic.list.push(GlobalData.numNodeMap[tsq]);
+			for(let j = 0;j < GData.moveStep.length;j++){
+				let step = GData.moveStep[j];
+				let tsq = GData.COORD_XY(x + step[0],y + step[1]);
+				//console.log("gameLogic",step,GData.numMap[tsq],myNum,tsq);
+				if(GData.numMap[tsq] == myNum){
+					numDic.list.push(GData.numNodeMap[tsq]);
 					numDic.eatNum += 1;
-					GlobalData.numMap[tsq] = 0;
-					GlobalData.numNodeMap[tsq] = 0;
+					GData.numMap[tsq] = 0;
+					GData.numNodeMap[tsq] = 0;
 					totalEatNum += 1;
 				}
 			}
 			if(numDic.eatNum > 0){
 				eatNumLevel.push(numDic);
 				myNum = myNum * 2;
-				GlobalData.numMap[sq] = myNum;
+				GData.numMap[sq] = myNum;
 			}else{
 				break;
 			}
@@ -394,16 +394,16 @@ cc.Class({
 		}else{
 			//2048 播放动作效果 退出循环
 			if(myNum == 2048){
-				GlobalData.numMap[sq] = 0;
-				GlobalData.numNodeMap[sq] = 0;
+				GData.numMap[sq] = 0;
+				GData.numNodeMap[sq] = 0;
 				oriNode.getComponent("NumObject").merge2048Action(this.voiceManager,sq,function(){
-					console.log(GlobalData.numMap);
+					console.log(GData.numMap);
 					oriNode.stopAllActions();
 					self.nodePool.put(oriNode);
 					//oriNode.removeFromParent();
 					//oriNode.destroy();
 					self.mergeFinish();
-					//console.log(GlobalData.numMap);
+					//console.log(GData.numMap);
 				});
 			}else{
 				this.mergeFinish();
@@ -414,24 +414,24 @@ cc.Class({
 		//判断游戏是否结束
 		var self = this;
 		var leftNum = 0;
-		for(var i = GlobalData.RANK_TOP;i < 6;i++){
-			for(var j = GlobalData.FILE_LEFT;j < 6;j++){
-				var fsq = GlobalData.COORD_XY(i,j);
-				if(GlobalData.numMap[fsq] == 0){
+		for(var i = GData.RANK_TOP;i < 6;i++){
+			for(var j = GData.FILE_LEFT;j < 6;j++){
+				var fsq = GData.COORD_XY(i,j);
+				if(GData.numMap[fsq] == 0){
 					leftNum += 1;
 				}
 			}
 		}
 		//存储信息
-		if(GlobalData.gameRunTimeParam.maxScore < GlobalData.gameRunTimeParam.totalScore){
-			GlobalData.gameRunTimeParam.maxScore = GlobalData.gameRunTimeParam.totalScore;
+		if(GData.GRunTimeParam.maxScore < GData.GRunTimeParam.totalScore){
+			GData.GRunTimeParam.maxScore = GData.GRunTimeParam.totalScore;
 		}
-		if(GlobalData.gameRunTimeParam.totalScore > GlobalData.cdnGameConfig.shareADLevel){
+		if(GData.GRunTimeParam.totalScore > GData.cdnGameConfig.shareADLevel){
 			util.reSetPropShareOrADRate();
 		}
 		this.battleNode.getComponent('BattleNode').show();
 		if(leftNum == 0){
-			GlobalData.gameRunTimeParam.gameStatus = 0;
+			GData.GRunTimeParam.gameStatus = 0;
 			this.stopRotateProp();
 			//复活道具
 			var propRelive = PropManager.getPropRelive();
@@ -442,28 +442,28 @@ cc.Class({
 			}
 		}
 		else if(leftNum == 1){
-			GlobalData.gameRunTimeParam.stepNum += 1;
+			GData.GRunTimeParam.stepNum += 1;
 			this.boardItem = null;
-			if(GlobalData.gameRunTimeParam.stepNum <= GlobalData.cdnGameConfig.NoDeadTotal){
+			if(GData.GRunTimeParam.stepNum <= GData.cdnGameConfig.NoDeadTotal){
 				this.refeshNumObject(false,2);
 			}else{
 				this.refeshNumObject(false,0);
 			}
 			//如果剩余一个格子则进行道具的引导使用 随机一个道具进行晃动
 			var propArray = new Array();
-			if(GlobalData.GamePropParam.bagNum['PropFresh'] > 0){
-				propArray.push('PropFresh');
+			if(GData.GamePropParam.bagNum['DJFresh'] > 0){
+				propArray.push('DJFresh');
 			}
-			var propBag = PropManager.getPropBag('PropHammer');
-			if(GlobalData.GamePropParam.useNum['PropHammer'] < propBag.useNum){
-				if(GlobalData.cdnPropParam.PropUnLock['PropHammer'] <= GlobalData.gameRunTimeParam.juNum){
-					propArray.push('PropHammer');
+			var propBag = PropManager.getPropBag('DJHammer');
+			if(GData.GamePropParam.useNum['DJHammer'] < propBag.useNum){
+				if(GData.cdnPropParam.PropUnLock['DJHammer'] <= GData.GRunTimeParam.juNum){
+					propArray.push('DJHammer');
 				}
 			}
-			var propBag = PropManager.getPropBag('PropBomb');
-			if(GlobalData.GamePropParam.useNum['PropBomb'] < propBag.useNum){
-				if(GlobalData.cdnPropParam.PropUnLock['PropBomb'] <= GlobalData.gameRunTimeParam.juNum){
-					propArray.push('PropBomb');
+			var propBag = PropManager.getPropBag('DJBomb');
+			if(GData.GamePropParam.useNum['DJBomb'] < propBag.useNum){
+				if(GData.cdnPropParam.PropUnLock['DJBomb'] <= GData.GRunTimeParam.juNum){
+					propArray.push('DJBomb');
 				}
 			}
 			var idx = util.getRandomIndexForArray(propArray);
@@ -473,7 +473,7 @@ cc.Class({
 			}
 		}else{
 			this.stopRotateProp();
-			GlobalData.gameRunTimeParam.stepNum += 1;
+			GData.GRunTimeParam.stepNum += 1;
 			this.boardItem = null;
 			this.refeshNumObject(false,0);
 		}
@@ -491,11 +491,11 @@ cc.Class({
 				cc.delayTime(1)
 			)
 		);
-		if(propName == 'PropFresh'){
+		if(propName == 'DJFresh'){
 			this.gamePropFresh.runAction(rotateAction);
-		}else if(propName == 'PropHammer'){
+		}else if(propName == 'DJHammer'){
 			this.gamePropClear.runAction(rotateAction);
-		}else if(propName == 'PropBomb'){
+		}else if(propName == 'DJBomb'){
 			this.gamePropBomb.runAction(rotateAction);
 		}
 	},
@@ -512,16 +512,16 @@ cc.Class({
 		EventManager.emit({type:'OpenFinishGame'});
 		this.initLoad();
 		//初始化矩阵信息
-		for(var i = GlobalData.RANK_TOP;i < 6;i++){
-			for(var j = GlobalData.FILE_LEFT;j < 6;j++){
-				var sq = GlobalData.COORD_XY(i,j);
-				//console.log(sq,GlobalData.numMap[sq]);                                                                    
-				if(GlobalData.numNodeMap[sq] != 0){
-					GlobalData.numNodeMap[sq].removeFromParent();
-					GlobalData.numNodeMap[sq].destroy();
+		for(var i = GData.RANK_TOP;i < 6;i++){
+			for(var j = GData.FILE_LEFT;j < 6;j++){
+				var sq = GData.COORD_XY(i,j);
+				//console.log(sq,GData.numMap[sq]);                                                                    
+				if(GData.numNodeMap[sq] != 0){
+					GData.numNodeMap[sq].removeFromParent();
+					GData.numNodeMap[sq].destroy();
 				}
-				GlobalData.numNodeMap[sq] = 0;
-				GlobalData.numMap[sq] = 0;
+				GData.numNodeMap[sq] = 0;
+				GData.numMap[sq] = 0;
 			}
 		}
 		for(var i = 0;i < this.blocksBoard.children.length;i++){
@@ -534,12 +534,12 @@ cc.Class({
 		}
 	},
 	destroyGameBoard(type){
-		var board = GlobalData.gameRunTimeScene[type];
+		var board = GData.gameRunTimeScene[type];
 		if(board != null){
 			board.stopAllActions();
 			board.removeFromParent();
 			board.destroy();
-			GlobalData.gameRunTimeScene[type] = null;
+			GData.gameRunTimeScene[type] = null;
 		}
 		return null;
 	},
@@ -551,8 +551,8 @@ cc.Class({
 		var mergeEnd = function(){
 			self.headNode.getComponent("HeadScore").startRollNum(totalScore);
 			if(finishKey == 2048){
-				GlobalData.numMap[sq] = 0;
-				GlobalData.numNodeMap[sq] = 0;
+				GData.numMap[sq] = 0;
+				GData.numNodeMap[sq] = 0;
 				oriNode.getComponent("NumObject").merge2048Action(self.voiceManager,sq,function(){
 					oriNode.stopAllActions();
 					self.nodePool.put(oriNode);
@@ -573,14 +573,14 @@ cc.Class({
 			}
 			for(let j = numDic.list.length - 1;j >= 0;j--){
 				let node = numDic.list[j];
-				let moveAction = cc.moveTo(GlobalData.TimeActionParam.EatNodeMoveTime,oriNodePos);
+				let moveAction = cc.moveTo(GData.TimeActionParam.EatNodeMoveTime,oriNodePos);
 				let finished = cc.callFunc(function(pthis,m){
 					self.nodePool.put(node);
 					if(m == 0){
 						let addScore = (numDic.key * 2) * numDic.list.length * (deep + 1);
-						GlobalData.gameRunTimeParam.totalScore += addScore;
+						GData.GRunTimeParam.totalScore += addScore;
 						oriNode.getComponent("NumObject").onInit(numDic.key * 2);
-						self.voiceManager.getComponent('AudioManager').play(GlobalData.AudioParam.AudioFall);
+						self.voiceManager.getComponent('AudioManager').play(GData.AudioParam.AudioFall);
 						self.flyNode.stopAllActions();
 						var size = oriNode.getContentSize();
 						var flyNodeSize = self.flyNode.getContentSize();
@@ -594,7 +594,7 @@ cc.Class({
 				},pthis,j);
 				node.runAction(cc.sequence(moveAction,finished));
 				if(j == 0){
-					self.voiceManager.getComponent('AudioManager').play(GlobalData.AudioParam.AudioComb1 + deep);
+					self.voiceManager.getComponent('AudioManager').play(GData.AudioParam.AudioComb1 + deep);
 				}
 			}
 		};
@@ -605,7 +605,7 @@ cc.Class({
 		try{
 			var self = this;
 			var content = '请分享到不同的群获得更多的好友帮助!';
-			if(propType == 'PropAV'){
+			if(propType == 'DJAV'){
 				content = '看完视频才能获得奖励，请再看一次!';
 			}
 			wx.showModal({
@@ -623,7 +623,7 @@ cc.Class({
 		}catch(err){}
 	},
 	getShareProp(prop,propType){
-		if(propType == 'PropShare'){
+		if(propType == 'DJShare'){
 			this.propKey = prop;
 			this.isShareCallBack = false;
 			this.shareSuccessCb = function(type, shareTicket, arg){
@@ -634,23 +634,23 @@ cc.Class({
 				this.isShareCallBack = true;
 				var spriteName = null;
 				var propNode = null;
-				if(this.propKey == "PropFresh"){
+				if(this.propKey == "DJFresh"){
 					spriteName = "deletePropIcon";
 					propNode = this.gamePropFresh;
-				}else if(this.propKey == "PropBomb"){
+				}else if(this.propKey == "DJBomb"){
 					spriteName = "bomb";
 					propNode = this.gamePropBomb;
-				}else if(this.propKey == "PropHammer"){
+				}else if(this.propKey == "DJHammer"){
 					spriteName = "clearPropIcon";
 					propNode = this.gamePropClear;
 				}else{
 					return;
 				}
-				var flyProp = cc.instantiate(GlobalData.assets["PBPropFly"]);
+				var flyProp = cc.instantiate(GData.assets["PBPropFly"]);
 				this.node.addChild(flyProp);
 				flyProp.setPosition(cc.v2(0,0));
 				flyProp.getComponent("NumFly").startFly(0.2,spriteName,1,propNode.getPosition(),function(){
-					GlobalData.GamePropParam.bagNum[this.propKey] += 1;
+					GData.GamePropParam.bagNum[this.propKey] += 1;
 					this.propFreshNum(this.propKey);
 				}.bind(this));
 			};
@@ -669,33 +669,33 @@ cc.Class({
 				shareName:prop,
 				isWait:true
 			};
-			if(GlobalData.cdnGameConfig.shareCustomSet == 0){
+			if(GData.cdnGameConfig.shareCustomSet == 0){
 				param.isWait = false;
 			}
 			ThirdAPI.shareGame(param);
 		}
-		else if(propType == 'PropAV'){
+		else if(propType == 'DJAV'){
 			this.propKey = prop;
 			this.shareSuccessCb = function(arg){
 				var spriteName = null;
 				var propNode = null;
-				if(this.propKey == "PropFresh"){
+				if(this.propKey == "DJFresh"){
 					spriteName = "deletePropIcon";
 					propNode = this.gamePropFresh;
-				}else if(this.propKey == "PropBomb"){
+				}else if(this.propKey == "DJBomb"){
 					spriteName = "bomb";
 					propNode = this.gamePropBomb;
-				}else if(this.propKey == "PropHammer"){
+				}else if(this.propKey == "DJHammer"){
 					spriteName = "clearPropIcon";
 					propNode = this.gamePropClear;
 				}else{
 					return;
 				}
-				var flyProp = cc.instantiate(GlobalData.assets["PBPropFly"]);
+				var flyProp = cc.instantiate(GData.assets["PBPropFly"]);
 				this.node.addChild(flyProp);
 				flyProp.setPosition(cc.v2(0,0));
 				flyProp.getComponent("NumFly").startFly(0.2,spriteName,1,propNode.getPosition(),function(){
-					GlobalData.GamePropParam.bagNum[this.propKey] += 1;
+					GData.GamePropParam.bagNum[this.propKey] += 1;
 					this.propFreshNum(this.propKey);
 				}.bind(this));
 			}.bind(this);
@@ -703,7 +703,7 @@ cc.Class({
 				if(arg == 'cancle'){
 					this.showFailInfo(prop,propType);
 				}else if(arg == 'error'){
-					this.getShareProp(prop,'PropShare');
+					this.getShareProp(prop,'DJShare');
 				}
 			}.bind(this);
 			WxVideoAd.initCreateReward(this.shareSuccessCb,this.shareFailedCb,null);
@@ -718,27 +718,27 @@ cc.Class({
 			return;
 		}
 		//res = "PropBao_PropHammer";
-		if(res == "PropFresh"){
-			var flyProp = cc.instantiate(GlobalData.assets["PBPropFly"]);
+		if(res == "DJFresh"){
+			var flyProp = cc.instantiate(GData.assets["PBPropFly"]);
 			this.node.addChild(flyProp);
 			flyProp.setPosition(fromPos);
 			flyProp.getComponent("NumFly").startFly(0.3,"deletePropIcon",1,this.gamePropFresh.getPosition(),function(){
 				//判断是否超过使用上限
 				var propBag = PropManager.getPropBag(res);
 				if(propBag.useNum >= 0){
-					if(GlobalData.GamePropParam.useNum[res] >= propBag.useNum){
+					if(GData.GamePropParam.useNum[res] >= propBag.useNum){
 						return;
 					}
 				}
 				//判断背包数量是否少于上限值
-				if(GlobalData.GamePropParam.bagNum[res] < propBag.bagNum){
-					GlobalData.GamePropParam.bagNum[res] += 1;
-					self.propFreshNum('PropFresh');
+				if(GData.GamePropParam.bagNum[res] < propBag.bagNum){
+					GData.GamePropParam.bagNum[res] += 1;
+					self.propFreshNum('DJFresh');
 				}
 			});
 		}
 		var resArr = res.split("_");
-		if(resArr[0] == "PropAV" || resArr[0] == "PropShare"){
+		if(resArr[0] == "DJAV" || resArr[0] == "DJShare"){
 			EventManager.emit({
 				type:'OpenPropScene',
 				pos:fromPos,
@@ -751,35 +751,35 @@ cc.Class({
 		var self = this;
 		var spriteName = null;
 		var propNode = null;
-		if(data.propKey == "PropFresh"){
+		if(data.propKey == "DJFresh"){
 			spriteName = "deletePropIcon";
 			propNode = this.gamePropFresh;
-		}else if(data.propKey == "PropBomb"){
+		}else if(data.propKey == "DJBomb"){
 			spriteName = "bomb";
 			propNode = this.gamePropBomb;
-		}else if(data.propKey == "PropHammer"){
+		}else if(data.propKey == "DJHammer"){
 			spriteName = "clearPropIcon";
 			propNode = this.gamePropClear;
 		}else{
 			return;
 		}
 			
-		var flyProp = cc.instantiate(GlobalData.assets["PBPropFly"]);
+		var flyProp = cc.instantiate(GData.assets["PBPropFly"]);
 		this.node.addChild(flyProp);
 		flyProp.setPosition(data.startPos);
 		flyProp.getComponent("NumFly").startFly(0.2,spriteName,1,propNode.getPosition(),function(){
 			//判断是否超过使用上限
 			var propBag = PropManager.getPropBag(data.propKey);
 			if(propBag.useNum >= 0){
-				if(GlobalData.GamePropParam.useNum[data.propKey] >= propBag.useNum){
+				if(GData.GamePropParam.useNum[data.propKey] >= propBag.useNum){
 					return;
 				}
 			}
 			//判断背包数量是否少于上限值
-			if(GlobalData.GamePropParam.bagNum[data.propKey] >= propBag.bagNum){
+			if(GData.GamePropParam.bagNum[data.propKey] >= propBag.bagNum){
 				return;
 			}
-			GlobalData.GamePropParam.bagNum[data.propKey] += 1;
+			GData.GamePropParam.bagNum[data.propKey] += 1;
 			self.propFreshNum(data.propKey);
 			ThirdAPI.updataGameInfo();
 		});
@@ -787,9 +787,9 @@ cc.Class({
 	eventTouchStart(event){
 		this.touchMoveTF = true;
 		this.moveIdx = -1;
-		if(GlobalData.gameRunTimeScene['PBBombGuide'] != null && GlobalData.gameRunTimeScene['PBBombGuide'].isValid == true){
+		if(GData.gameRunTimeScene['PBBombGuide'] != null && GData.gameRunTimeScene['PBBombGuide'].isValid == true){
 			this.destroyGameBoard('PBBombGuide');
-			GlobalData.gameRunTimeParam.lastFreshNum = 2048;
+			GData.GRunTimeParam.lastFreshNum = 2048;
 			WxBannerAd.showBannerAd();
 		}
 		this.initLocation = this.boardItem.getPosition();
@@ -803,10 +803,10 @@ cc.Class({
 	eventTouchMove(event){
 		//console.log('poker TOUCH_MOVE',event.touch.getDelta().x,event.touch.getDelta().y);
 		let delta = event.touch.getDelta();
-		if(GlobalData.phoneModel == 'IphoneX'){
+		if(GData.phoneModel == 'IphoneX'){
 			this.boardItem.x += (delta.x / (1125 / 640));
 			this.boardItem.y += (delta.y / (2246 / 1136));
-		}else if(GlobalData.phoneModel == 'IphoneXR'){
+		}else if(GData.phoneModel == 'IphoneXR'){
 			this.boardItem.x += (delta.x / (828 / 640));
 			this.boardItem.y += (delta.y / (1602 / 1136));
 		}else{
@@ -829,8 +829,8 @@ cc.Class({
 		//如果移动的位置合法则进行移动
 		this.touchMoveTF = false;
 		if(this.moveIdx != -1){
-			var sq = GlobalData.ConvertToMapSpace(this.moveIdx);
-			if(GlobalData.numMap[sq] == 0){
+			var sq = GData.ConvertToMapSpace(this.moveIdx);
+			if(GData.numMap[sq] == 0){
 				var block = this.blocksBoard.children[this.moveIdx];
 				var blockPos = block.getPosition();
 				var blocksBoardPos = this.blocksBoard.getPosition();
@@ -840,8 +840,8 @@ cc.Class({
 				block.getComponent("BlockBoard").shadowSprite.active = false;
 				this.boardItem.getComponent("NumObject").scaleBigOnce(this.voiceManager);
 				this.offNodeAction();
-				GlobalData.numMap[sq] = parseInt(this.boardItem.getComponent("NumObject").value);
-				GlobalData.numNodeMap[sq] = this.boardItem;
+				GData.numMap[sq] = parseInt(this.boardItem.getComponent("NumObject").value);
+				GData.numNodeMap[sq] = this.boardItem;
 				this.gameLogic();
 			}else{
 				//var moveAction = cc.moveTo(0.02,this.initLocation);
@@ -861,8 +861,8 @@ cc.Class({
 		//如果移动的位置合法则进行移动
 		this.touchMoveTF = false;
 		if(this.moveIdx != -1){
-			var sq = GlobalData.ConvertToMapSpace(this.moveIdx);
-			if(GlobalData.numMap[sq] == 0){
+			var sq = GData.ConvertToMapSpace(this.moveIdx);
+			if(GData.numMap[sq] == 0){
 				var block = this.blocksBoard.children[this.moveIdx];
 				var blockPos = block.getPosition();
 				var blocksBoardPos = this.blocksBoard.getPosition();
@@ -872,8 +872,8 @@ cc.Class({
 				block.getComponent("BlockBoard").shadowSprite.active = false;
 				this.boardItem.getComponent("NumObject").scaleBigOnce(this.voiceManager);
 				this.offNodeAction();
-				GlobalData.numMap[sq] = parseInt(this.boardItem.getComponent("NumObject").value);
-				GlobalData.numNodeMap[sq] = this.boardItem;
+				GData.numMap[sq] = parseInt(this.boardItem.getComponent("NumObject").value);
+				GData.numNodeMap[sq] = this.boardItem;
 				this.gameLogic();
 				return true;
 			}else{
@@ -901,24 +901,24 @@ cc.Class({
 			//console.log("在矩形内部");
 			var selectIdx = this.getNearBlock(pressPos);
 			if(selectIdx >= 0 && selectIdx <= 15){
-				var sq = GlobalData.ConvertToMapSpace(selectIdx);
-				if(GlobalData.numMap[sq] != 0 && GlobalData.numNodeMap[sq] != 0){
+				var sq = GData.ConvertToMapSpace(selectIdx);
+				if(GData.numMap[sq] != 0 && GData.numNodeMap[sq] != 0){
 					//如果找到选择的格子 则取消监听事件
 					var self = this;
-					var selectNode = GlobalData.numNodeMap[sq];
+					var selectNode = GData.numNodeMap[sq];
 					var selectPos = selectNode.getPosition();
-					var propHammerGuide = GlobalData.gameRunTimeScene['PBHammerGuide'];
+					var propHammerGuide = GData.gameRunTimeScene['PBHammerGuide'];
 					propHammerGuide.getComponent("PropHammerEffect").hammerOneNum(selectNode,function(){
 						selectNode.removeFromParent();
 						selectNode.destroy();
-						GlobalData.numNodeMap[sq] = 0;
-						GlobalData.numMap[sq] = 0;
+						GData.numNodeMap[sq] = 0;
+						GData.numMap[sq] = 0;
 						var block = self.blocksBoard.children[selectIdx];
 						block.getComponent("BlockBoard").shadowSprite.active = false;
 						self.destroyGameBoard('PBHammerGuide');
-						GlobalData.GamePropParam.useNum['PropHammer'] += 1;
-						GlobalData.GamePropParam.bagNum['PropHammer'] -= 1;
-						self.propFreshNum('PropHammer');
+						GData.GamePropParam.useNum['DJHammer'] += 1;
+						GData.GamePropParam.bagNum['DJHammer'] -= 1;
+						self.propFreshNum('DJHammer');
 						WxBannerAd.showBannerAd();
 					});
 				}
@@ -934,7 +934,7 @@ cc.Class({
 			this.boardItem = null;
 		}
 		
-		this.boardItem = cc.instantiate(GlobalData.assets["PBNumObject"]);
+		this.boardItem = cc.instantiate(GData.assets["PBNumObject"]);
 		this.boardItem.getComponent("NumObject").scaleShow(num,this.voiceManager);
 		this.boardItem.on(cc.Node.EventType.TOUCH_START, this.eventTouchStart,this);
 		this.boardItem.on(cc.Node.EventType.TOUCH_MOVE, this.eventTouchMove,this);
@@ -943,23 +943,23 @@ cc.Class({
 		this.node.addChild(this.boardItem);
 		var blockBoardPos = this.blockBoard.getPosition();
 		this.boardItem.setPosition(cc.v2(blockBoardPos.x,blockBoardPos.y - 3));
-		console.log("refeshNumObject",GlobalData.gameRunTimeParam.stepNum);
+		console.log("refeshNumObject",GData.GRunTimeParam.stepNum);
 	},
 	//道具个数发生变化
 	propFreshNum(prop){
-		if(prop == 'PropFresh'){
-			this.gamePropFresh.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GlobalData.GamePropParam.bagNum['PropFresh'];
-		}else if(prop == 'PropHammer'){
-			if(GlobalData.GamePropParam.bagNum['PropHammer'] > 0){
+		if(prop == 'DJFresh'){
+			this.gamePropFresh.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GData.GamePropParam.bagNum['DJFresh'];
+		}else if(prop == 'DJHammer'){
+			if(GData.GamePropParam.bagNum['DJHammer'] > 0){
 				this.gamePropClear.getChildByName("add").active = false;
 				this.gamePropClear.getChildByName("numLabel").active = true;
-				this.gamePropClear.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GlobalData.GamePropParam.bagNum['PropHammer'];
+				this.gamePropClear.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GData.GamePropParam.bagNum['DJHammer'];
 			}else{
 				var addNode = this.gamePropClear.getChildByName("add");
 				var propBag = PropManager.getPropBag(prop);
 				//判断是否到达使用上限
 				if(propBag.useNum >= 0){
-					if(GlobalData.GamePropParam.useNum[prop] >= propBag.useNum){
+					if(GData.GamePropParam.useNum[prop] >= propBag.useNum){
 						addNode.active = false;
 						this.gamePropClear.getChildByName("numLabel").active = true;
 						this.gamePropClear.getChildByName("numLabel").getComponent(cc.Label).string = "x" + 0;
@@ -968,26 +968,26 @@ cc.Class({
 				}
 				var propType = PropManager.getShareOrADKey(prop);
 				this.propConfig[prop] = propType;
-				if(propType == 'PropShare'){
-					addNode.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['getsba'];
-				}else if(propType == 'PropAV'){
-					addNode.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['video'];
+				if(propType == 'DJShare'){
+					addNode.getComponent(cc.Sprite).spriteFrame = GData.assets['getsba'];
+				}else if(propType == 'DJAV'){
+					addNode.getComponent(cc.Sprite).spriteFrame = GData.assets['video'];
 				}
 				addNode.active = true;
 				this.gamePropClear.getChildByName("numLabel").active = false;
 			}
-		}else if(prop == 'PropBomb'){
-			console.log(GlobalData.GamePropParam);
-			if(GlobalData.GamePropParam.bagNum['PropBomb'] > 0){
+		}else if(prop == 'DJBomb'){
+			console.log(GData.GamePropParam);
+			if(GData.GamePropParam.bagNum['DJBomb'] > 0){
 				this.gamePropBomb.getChildByName("add").active = false;
 				this.gamePropBomb.getChildByName("numLabel").active = true;
-				this.gamePropBomb.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GlobalData.GamePropParam.bagNum['PropBomb'];
+				this.gamePropBomb.getChildByName("numLabel").getComponent(cc.Label).string = "x" + GData.GamePropParam.bagNum['DJBomb'];
 			}else{
 				var addNode = this.gamePropBomb.getChildByName("add");
 				var propBag = PropManager.getPropBag(prop);
 				//判断是否到达使用上限
 				if(propBag.useNum >= 0){
-					if(GlobalData.GamePropParam.useNum[prop] >= propBag.useNum){
+					if(GData.GamePropParam.useNum[prop] >= propBag.useNum){
 						addNode.active = false;
 						this.gamePropBomb.getChildByName("numLabel").active = true;
 						this.gamePropBomb.getChildByName("numLabel").getComponent(cc.Label).string = "x" + 0;
@@ -997,10 +997,10 @@ cc.Class({
 				var propType = PropManager.getShareOrADKey(prop);
 				this.propConfig[prop] = propType;
 				
-				if(propType == 'PropShare'){
-					addNode.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['getsba'];
-				}else if(propType == 'PropAV'){
-					addNode.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['video'];
+				if(propType == 'DJShare'){
+					addNode.getComponent(cc.Sprite).spriteFrame = GData.assets['getsba'];
+				}else if(propType == 'DJAV'){
+					addNode.getComponent(cc.Sprite).spriteFrame = GData.assets['video'];
 				}
 				this.gamePropBomb.getChildByName("add").active = true;
 				this.gamePropBomb.getChildByName("numLabel").active = false;
@@ -1019,8 +1019,8 @@ cc.Class({
 						this.shadowBlok.getComponent("BlockBoard").shadowSprite.active = false;
 					}
 					this.shadowBlok = this.blocksBoard.children[this.moveIdx];
-					var sq = GlobalData.ConvertToMapSpace(this.moveIdx);
-					var myNum = GlobalData.numMap[sq];
+					var sq = GData.ConvertToMapSpace(this.moveIdx);
+					var myNum = GData.numMap[sq];
 					if(myNum != 0){
 						this.shadowBlok.getComponent("BlockBoard").shadowSprite.active = false;
 					}else{

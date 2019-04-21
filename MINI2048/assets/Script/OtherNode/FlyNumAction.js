@@ -10,7 +10,7 @@ cc.Class({
 		}else{
 			this.numLabel.getComponent(cc.Label).string = addScore + "x" + (idx + 1);
 		}
-		this.numLabel.color = this.numLabel.color.fromHEX(GlobalData.flyNumColors[keyNum]);//cc.hexToColor(GlobalData.flyNumColors[keyNum]);
+		this.numLabel.color = this.numLabel.color.fromHEX(GData.flyNumColors[keyNum]);//cc.hexToColor(GData.flyNumColors[keyNum]);
 		this.node.scale = 0.5;
 		var pos = this.node.getPosition();
         var bigAction = cc.scaleTo(0.2, 1);

@@ -12,7 +12,7 @@ let WxBannerAd = {
 				return null;
 			}
             console.log('bannerAd:', this.bannerAd);
-            if (this.bannerAd && !GlobalData.cdnGameConfig.refreshBanner) {
+            if (this.bannerAd && !GData.cdnGameConfig.refreshBanner) {
                 console.log('不刷新banner广告');
                 this.showBannerAd();
                 return;
@@ -47,13 +47,13 @@ let WxBannerAd = {
 							}
 							// 适配iphoneX
 							if (this.bannerAd && this.bannerAd.style) {
-								//var buttomHeight = sysInfo.screenHeight / 2 - (sysInfo.screenHeight * Math.abs(GlobalData.footPosY) / 568 / 2 - GlobalData.footPosY) / 2;
+								//var buttomHeight = sysInfo.screenHeight / 2 - (sysInfo.screenHeight * Math.abs(GData.footPosY) / 568 / 2 - GData.footPosY) / 2;
 								if(screenHeight * yRate <= this.bannerAd.style.realHeight){
 									this.bannerAd.style.width *= ((screenHeight * yRate) /this.bannerAd.style.realHeight);
 								}
 								//this.bannerAd.style.width = 300;
 								var buttomHeight = this.bannerAd.style.realHeight;
-								console.log('buttomHeight', GlobalData.cdnGameConfig.footPosY, buttomHeight);
+								console.log('buttomHeight', GData.cdnGameConfig.footPosY, buttomHeight);
 								this.bannerAd.style.left = (screenWidth - res.width) / 2;
 								this.bannerAd.style.top = screenHeight - Math.abs(buttomHeight);
 							}
@@ -86,7 +86,7 @@ let WxBannerAd = {
     destroyBannerAd: function () {
         console.log('call destroyBannerAd');
         if (this.bannerAd) {
-            if (!GlobalData.cdnGameConfig.refreshBanner) {
+            if (!GData.cdnGameConfig.refreshBanner) {
                 console.log('不销毁banner广告，只隐藏');
                 this.hideBannerAd();
                 return;

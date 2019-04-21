@@ -1,9 +1,9 @@
-GlobalData = {
+GData = {
 	//皮肤设置
 	skin:'color1',
 	phoneModel:'',
 	cdnWebsite: "https://alicdn.zhituokeji.com/",
-	cdnFileDefaultPath:"cdnParam1.2.0.7",
+	cdnFileDefaultPath:"cdnParam1.0.0",
 	gameSceneDic:{
 		PBBombGuide:['prefabs/PBBombGuide','PropBombEffect'],
 		PBContinueGameBoard:['prefabs/PBContinueGameBoard','ContinueGame'],
@@ -23,7 +23,7 @@ GlobalData = {
 		
 	},
 	//历史游戏的最高得分
-	gameRunTimeParam:{
+	GRunTimeParam:{
 		StartGuideFlag:false,
 		gameStatus:0,
 		totalScore:0,
@@ -121,11 +121,11 @@ GlobalData = {
 		gameModel:'crazy',
 		shareSuccessWeight:[1,1,1,1,1],
 		shareADLevel:2000,
-		PropShare:0.5,
-		PropAV:0.5,
+		DJShare:0.5,
+		DJAV:0.5,
 		NoDeadTotal:100,//防死持续步数
 		NoDeadRate:0.5,
-		PropFreshEnableRate:0.5,//刷出有用数值的概率
+		DJFreshEnableRate:0.5,//刷出有用数值的概率
 		NumRateJuNum:15,
 		shareCustomSet:1		//0 关闭 自定义分享 1打开自定义分享
 	},
@@ -301,88 +301,88 @@ GlobalData = {
 	//道具概率参数
 	GamePropParam:{
 		bagNum:{
-			PropFresh:0,
-			PropHammer:0,
-			PropBomb:0,
-			PropRelive:0
+			DJFresh:0,
+			DJHammer:0,
+			DJBomb:0,
+			DJRelive:0
 		},
 		useNum:{
-			PropFresh:0,
-			PropHammer:0,
-			PropBomb:0,
-			PropRelive:0
+			DJFresh:0,
+			DJHammer:0,
+			DJBomb:0,
+			DJRelive:0
 		}
 	},
 	cdnPropParam:{	//道具自定义参数
 		MergeParam:{	//合并数字出现刷新或者其他概率
 			3:{
 				2:{
-					PropFresh:0,
-					PropSAB:0
+					DJFresh:0,
+					DJSAB:0
 				},
 				3:{
-					PropFresh:0,
-					PropSAB:0
+					DJFresh:0,
+					DJSAB:0
 				},
 				4:{
-					PropFresh:1,
-					PropSAB:0
+					DJFresh:1,
+					DJSAB:0
 				},
 				5:{
-					PropFresh:1,
-					PropSAB:0
+					DJFresh:1,
+					DJSAB:0
 				}
 			},
 			default:{
 				2:{
-					PropFresh:0,
-					PropSAB:0
+					DJFresh:0,
+					DJSAB:0
 				},
 				3:{
-					PropSAB:0.2,
-					PropFresh:0.2
+					DJSAB:0.2,
+					DJFresh:0.2
 				},
 				4:{
-					PropFresh:0.45,
-					PropSAB:0.3
+					DJFresh:0.45,
+					DJSAB:0.3
 				},
 				5:{
-					PropFresh:0,
-					PropSAB:1
+					DJFresh:0,
+					DJSAB:1
 				}
 			}
 		},
 		PropUnLock:{	//道具解锁盘数
-			PropFresh:1,
-			PropHammer:1,
-			PropSAB:3,
-			PropBomb:1,
+			DJFresh:1,
+			DJHammer:1,
+			DJSAB:3,
+			DJBomb:1,
 			PropAD:1,		//分享广告解锁盘数
-			PropAV:1,
-			PropShare:1,
-			PropRelive:3,
-			PropBattle:1,
+			DJAV:1,
+			DJShare:1,
+			DJRelive:3,
+			DJBattle:1,
 			PropInner:2,
 			PropLocker:2,
 			StartMenu:1
 		},
-		PropReliveRate:{
+		DJReliveRate:{
 			3:1,
 			default:1
 		},
 		SABOpenRate:{		//打开宝箱获取道具的概率
-			PropFresh:1,
-			PropHammer:0,
-			PropBomb:0
+			DJFresh:1,
+			DJHammer:0,
+			DJBomb:0
 		},
 		PropParam:{
 			//刷新概率参数设置
-			PropFresh:{
+			DJFresh:{
 				bagNum:20,
 				useNum:-1,
 			},
 			//锤子概率参数设置
-			PropHammer:{
+			DJHammer:{
 				15:{
 					bagNum:3,
 					useNum:3
@@ -397,7 +397,7 @@ GlobalData = {
 				}
 			},
 			//炸弹概率参数设置
-			PropBomb:{
+			DJBomb:{
 				15:{
 					bagNum:3,
 					useNum:3
@@ -412,7 +412,7 @@ GlobalData = {
 				}
 			},
 			//复活概率参数设置
-			PropRelive:{
+			DJRelive:{
 				15:{
 					bagNum:3,
 					useNum:3
@@ -431,137 +431,137 @@ GlobalData = {
 		PropShareOrADRate:{
 			crazy:{
 				3:{
-					PropHammer:{
-						PropShare:0,
-						PropAV:1
+					DJHammer:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBomb:{
-						PropShare:0,
-						PropAV:1
+					DJBomb:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropSAB:{
-						PropShare:0,
-						PropAV:1
+					DJSAB:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropRelive:{
-						PropShare:1,
-						PropAV:0
+					DJRelive:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBattle:{
-						PropShare:1,
-						PropAV:0
+					DJBattle:{
+						DJShare:1,
+						DJAV:0
 					}
 				},
 				20:{
-					PropHammer:{
-						PropShare:0.8,
-						PropAV:0.2
+					DJHammer:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBomb:{
-						PropShare:0.8,
-						PropAV:0.2
+					DJBomb:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropSAB:{
-						PropShare:0,
-						PropAV:1
+					DJSAB:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropRelive:{
-						PropShare:1,
-						PropAV:0
+					DJRelive:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBattle:{
-						PropShare:1,
-						PropAV:0
+					DJBattle:{
+						DJShare:1,
+						DJAV:0
 					}
 				},
 				'default':{
-					PropHammer:{
-						PropShare:0.2,
-						PropAV:0.8
+					DJHammer:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBomb:{
-						PropShare:0.2,
-						PropAV:0.8
+					DJBomb:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropSAB:{
-						PropShare:0.6,
-						PropAV:0.4
+					DJSAB:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropRelive:{
-						PropShare:0.8,
-						PropAV:0.2
+					DJRelive:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBattle:{
-						PropShare:1,
-						PropAV:0
+					DJBattle:{
+						DJShare:1,
+						DJAV:0
 					}
 				}
 			},
 			normal:{
 				4:{
-					PropHammer:{
-						PropShare:0,
-						PropAV:1
+					DJHammer:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropBomb:{
-						PropShare:0,
-						PropAV:1
+					DJBomb:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropSAB:{
-						PropShare:0,
-						PropAV:1
+					DJSAB:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropRelive:{
-						PropShare:0,
-						PropAV:1
+					DJRelive:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropBattle:{
-						PropShare:0,
-						PropAV:1
+					DJBattle:{
+						DJShare:0,
+						DJAV:1
 					}
 				},
 				31:{
-					PropHammer:{
-						PropShare:0,
-						PropAV:1
+					DJHammer:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropBomb:{
-						PropShare:0,
-						PropAV:1
+					DJBomb:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropSAB:{
-						PropShare:0,
-						PropAV:1
+					DJSAB:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropRelive:{
-						PropShare:0,
-						PropAV:1
+					DJRelive:{
+						DJShare:0,
+						DJAV:1
 					},
-					PropBattle:{
-						PropShare:0,
-						PropAV:1
+					DJBattle:{
+						DJShare:0,
+						DJAV:1
 					}
 				},
 				'default':{
-					PropHammer:{
-						PropShare:0.7,
-						PropAV:0.3
+					DJHammer:{
+						DJShare:0.7,
+						DJAV:0.3
 					},
-					PropBomb:{
-						PropShare:0.7,
-						PropAV:0.3
+					DJBomb:{
+						DJShare:0.7,
+						DJAV:0.3
 					},
-					PropSAB:{
-						PropShare:0.7,
-						PropAV:0.3
+					DJSAB:{
+						DJShare:0.7,
+						DJAV:0.3
 					},
-					PropRelive:{
-						PropShare:1,
-						PropAV:0
+					DJRelive:{
+						DJShare:1,
+						DJAV:0
 					},
-					PropBattle:{
-						PropShare:0.7,
-						PropAV:0.3
+					DJBattle:{
+						DJShare:0.7,
+						DJAV:0.3
 					}
 				}
 			}

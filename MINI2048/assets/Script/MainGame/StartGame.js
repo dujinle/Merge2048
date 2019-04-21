@@ -30,12 +30,12 @@ cc.Class({
 	},
 	refreshGame(){
 		this.initInnerChain(0);
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['PropBattle']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['DJBattle']){
 			this.battleButton.active = true;
 		}else{
 			this.battleButton.active = false;
 		}
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['StartMenu']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['StartMenu']){
 			this.buttonLayout.active = true;
 		}else{
 			this.buttonLayout.active = false;
@@ -44,16 +44,16 @@ cc.Class({
 	initInnerChain(time){
 		var self = this;
 		this.innerChain.active = false;
-		if(GlobalData.cdnPropParam.PropUnLock['PropLocker'] <= GlobalData.gameRunTimeParam.juNum){
-			this.innerChain.getComponent('ScrollLinkGame').createAllLinkGame(GlobalData.cdnOtherGameDoor.locker);
+		if(GData.cdnPropParam.PropUnLock['PropLocker'] <= GData.GRunTimeParam.juNum){
+			this.innerChain.getComponent('ScrollLinkGame').createAllLinkGame(GData.cdnOtherGameDoor.locker);
 			this.node.runAction(cc.sequence(cc.delayTime(time),cc.callFunc(function(){
 				self.innerChain.active = true;
 			})));
 		}
 		this.oneInner.active = false;
-		if(GlobalData.cdnPropParam.PropUnLock['PropInner'] <= GlobalData.gameRunTimeParam.juNum){
+		if(GData.cdnPropParam.PropUnLock['PropInner'] <= GData.GRunTimeParam.juNum){
 			this.oneInner.active = true;
-			this.oneInner.getComponent('LockerItem').setLinkGame(GlobalData.cdnOtherGameDoor.InnerChain);
+			this.oneInner.getComponent('LockerItem').setLinkGame(GData.cdnOtherGameDoor.InnerChain);
 		}
 	},
 	finishLoad(voiceManager){
@@ -67,7 +67,7 @@ cc.Class({
 	},
 	shareButtonCb(){
 		if(this.voiceManager != null){
-			this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+			this.voiceManager.getComponent("AudioManager").play(GData.AudioParam.AudioButton);
 		}
 		var param = {
 			type:null,
@@ -80,15 +80,15 @@ cc.Class({
 		ThirdAPI.shareGame(param);
 	},
 	soundButtonCb(){
-		if(GlobalData.AudioSupport == false){
+		if(GData.AudioSupport == false){
 			this.soundOnNode.active = true;
 			this.soundOffNode.active = false;
-			GlobalData.AudioSupport = true;
+			GData.AudioSupport = true;
 		}else{
 			if(this.voiceManager != null){
-				this.voiceManager.getComponent("AudioManager").play(GlobalData.AudioParam.AudioButton);
+				this.voiceManager.getComponent("AudioManager").play(GData.AudioParam.AudioButton);
 			}
-			GlobalData.AudioSupport = false;
+			GData.AudioSupport = false;
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
 		}
@@ -107,9 +107,9 @@ cc.Class({
 	},
 	battleButtonCb(event){
 		if(this.openType == null){
-			this.openType = PropManager.getShareOrADKey('PropBattle');
+			this.openType = PropManager.getShareOrADKey('DJBattle');
 		}
-		if(this.openType == 'PropShare'){
+		if(this.openType == 'DJShare'){
 			this.isShareCallBack = false;
 			var param = {
 				type:null,
@@ -119,16 +119,16 @@ cc.Class({
 				shareName:this.openType,
 				isWait:true
 			};
-			if(GlobalData.cdnGameConfig.shareCustomSet == 0){
+			if(GData.cdnGameConfig.shareCustomSet == 0){
 				param.isWait = false;
 			}
 			ThirdAPI.shareGame(param);
 		}
-		else if(this.openType == 'PropAV'){
+		else if(this.openType == 'DJAV'){
 			this.AVSuccessCb = function(arg){
 				EventManager.emit({
 					type:'StartBattleSuccess',
-					propKey:'PropBomb',
+					propKey:'DJBomb',
 					startPos:cc.v2(0,0)
 				});
 			}.bind(this);
@@ -136,7 +136,7 @@ cc.Class({
 				if(arg == 'cancle'){
 					this.showFailInfo();
 				}else if(arg == 'error'){
-					this.openType = "PropShare";
+					this.openType = "DJShare";
 					this.battleButtonCb(null);
 				}
 			}.bind(this);
@@ -147,7 +147,7 @@ cc.Class({
 		this.isShareCallBack = true;
 		EventManager.emit({
 			type:'StartBattleSuccess',
-			propKey:'PropBomb',
+			propKey:'DJBomb',
 			startPos:cc.v2(0,0)
 		});
 	},
@@ -161,7 +161,7 @@ cc.Class({
 		try{
 			var self = this;
 			var content = '请分享到不同的群获得更多的好友帮助!';
-			if(this.openType == 'PropAV'){
+			if(this.openType == 'DJAV'){
 				content = '看完视频才能获得奖励，请再看一次!';
 			}
 			wx.showModal({
@@ -186,22 +186,22 @@ cc.Class({
 		if(type == 'UP'){
 			var yy = winSize.height/2 + nodeSize.height/2;
 			node.setPosition(cc.v2(originPos.x,yy));
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,originPos);
 			node.runAction(moveTo);
 		}else if(type == 'DOWN'){
 			var yy = (winSize.height/2 + nodeSize.height/2) * -1;
 			node.setPosition(cc.v2(originPos.x,yy));
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,originPos);
 			node.runAction(moveTo);
 		}else if(type == 'LEFT'){
 			var xx = (winSize.width/2 + nodeSize.width/2) * -1;
 			node.setPosition(cc.v2(xx,originPos.y));
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,originPos);
 			node.runAction(moveTo);
 		}else if(type == 'RIGHT'){
 			var xx = winSize.width/2 + nodeSize.width/2;
 			node.setPosition(cc.v2(xx,originPos.y));
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,originPos);
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,originPos);
 			node.runAction(moveTo);
 		}
 		this.nodePosChange[node.uuid] = [node,originPos];
@@ -218,19 +218,19 @@ cc.Class({
 		}
 		if(type == 'UP'){
 			var yy = winSize.height/2 + nodeSize.height/2;
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
 			node.runAction(moveTo);
 		}else if(type == 'DOWN'){
 			var yy = (winSize.height/2 + nodeSize.height/2) * -1;
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,cc.v2(originPos.x,yy));
 			node.runAction(moveTo);
 		}else if(type == 'LEFT'){
 			var xx = (winSize.width/2 + nodeSize.width/2) * -1;
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
 			node.runAction(moveTo);
 		}else if(type == 'RIGHT'){
 			var xx = winSize.width/2 + nodeSize.width/2;
-			var moveTo = cc.moveTo(GlobalData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
+			var moveTo = cc.moveTo(GData.TimeActionParam.StartGameMoveTime,cc.v2(xx,originPos.y));
 			node.runAction(moveTo);
 		}
 	},
@@ -245,26 +245,26 @@ cc.Class({
 		this.node.active = true;
 		this.openType = null;
 		
-		if(GlobalData.AudioSupport == false){
+		if(GData.AudioSupport == false){
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
 		}else{
 			this.soundOnNode.active = true;
 			this.soundOffNode.active = false;
 		}
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['PropBattle']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['DJBattle']){
 			this.battleButton.active = true;
 		}else{
 			this.battleButton.active = false;
 		}
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['StartMenu']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['StartMenu']){
 			this.buttonLayout.active = true;
 		}else{
 			this.buttonLayout.active = false;
 		}
 		this.scoreLabel.active = true;
 		this.kingSprite.active = true;
-		this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
+		this.scoreLabel.getComponent(cc.Label).string = GData.GRunTimeParam.maxScore;
 		this.slideIn(this.gameLogo,'UP');
 		this.slideIn(this.startButton,'LEFT');
 		if(this.battleButton.active == true){
@@ -274,14 +274,14 @@ cc.Class({
 		if(this.buttonLayout.active == true){
 			this.slideIn(this.buttonLayout,'DOWN');
 		}
-		this.initInnerChain(GlobalData.TimeActionParam.StartGameMoveTime);
+		this.initInnerChain(GData.TimeActionParam.StartGameMoveTime);
 	},
 	hideStaticStart(callBack){
 		var self = this;
 		//this.node.active = false;
 		console.log("start game board hide");
 		var winSize = this.node.getContentSize();
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['PropBattle']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['DJBattle']){
 			this.battleButton.active = true;
 		}else{
 			this.battleButton.active = false;
@@ -302,7 +302,7 @@ cc.Class({
 		var self = this;
 		console.log("start game board hide");
 		var winSize = this.node.getContentSize();
-		if(GlobalData.gameRunTimeParam.juNum >= GlobalData.cdnPropParam.PropUnLock['PropBattle']){
+		if(GData.GRunTimeParam.juNum >= GData.cdnPropParam.PropUnLock['DJBattle']){
 			this.battleButton.active = true;
 		}else{
 			this.battleButton.active = false;
@@ -328,7 +328,7 @@ cc.Class({
 		},this);
 		if(this.node.active == true){
 			this.node.runAction(cc.sequence(
-				cc.delayTime(GlobalData.TimeActionParam.StartGameMoveTime),
+				cc.delayTime(GData.TimeActionParam.StartGameMoveTime),
 				hideAction
 			));
 		}else{

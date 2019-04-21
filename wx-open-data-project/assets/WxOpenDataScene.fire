@@ -2612,7 +2612,7 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": -145,
+      "x": -150,
       "y": 480
     },
     "_skewX": 0,
@@ -2900,7 +2900,9 @@
     "_enabled": true,
     "_type": 1,
     "_segements": 64,
-    "_N$spriteFrame": null,
+    "_N$spriteFrame": {
+      "__uuid__": "5745f35a-9816-43db-850c-ec1d8bd1e20c"
+    },
     "_N$alphaThreshold": 1,
     "_N$inverted": false
   },

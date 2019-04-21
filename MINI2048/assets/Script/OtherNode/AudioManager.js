@@ -8,7 +8,7 @@ cc.Class({
 		},
     },
 	play(type){
-		if(GlobalData.AudioSupport == true){
+		if(GData.AudioSupport == true){
 			this.audioSources[type].getComponent(cc.AudioSource).play();
 		}
 	}

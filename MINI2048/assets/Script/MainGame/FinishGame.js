@@ -27,8 +27,8 @@ cc.Class({
 	initInnerChain(time){
 		var self = this;
 		this.innerChainNode.active = false;
-		if(GlobalData.cdnPropParam.PropUnLock.PropLocker <= GlobalData.gameRunTimeParam.juNum){
-			this.innerChainNode.getComponent('ScrollLinkGame').createAllLinkGame(GlobalData.cdnOtherGameDoor.locker);
+		if(GData.cdnPropParam.PropUnLock.PropLocker <= GData.GRunTimeParam.juNum){
+			this.innerChainNode.getComponent('ScrollLinkGame').createAllLinkGame(GData.cdnOtherGameDoor.locker);
 			this.node.runAction(cc.sequence(cc.delayTime(time),cc.callFunc(function(){
 				self.innerChainNode.active = true;
 			})));
@@ -39,8 +39,8 @@ cc.Class({
 	},
 	show(){
 		console.log("finish game show");
-		this.scoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.totalScore;
-		this.maxScoreLabel.getComponent(cc.Label).string = GlobalData.gameRunTimeParam.maxScore;
+		this.scoreLabel.getComponent(cc.Label).string = GData.GRunTimeParam.totalScore;
+		this.maxScoreLabel.getComponent(cc.Label).string = GData.GRunTimeParam.maxScore;
 		//this.isDraw = true;
 		//this.initInnerChain(0);
 		//this.node.active = true;

@@ -15,16 +15,16 @@ let util = {
 	},
 	reSetPropShareOrADRate(){
 		console.log('reSetPropShareOrADRate');
-		for(var key in GlobalData.cdnPropParam.PropShareOrADRate){
-			var item = GlobalData.cdnPropParam.PropShareOrADRate[key];
+		for(var key in GData.cdnPropParam.PropShareOrADRate){
+			var item = GData.cdnPropParam.PropShareOrADRate[key];
 			//cary or normal
 			for(var key2 in item){
 				//4,31,default
 				var item2 = item[key2];
 				for(var key3 in item2){
-					if(key3 == 'PropSAB'){
-						item2[key3].PropShare = GlobalData.cdnGameConfig.PropShare;
-						item2[key3].PropAV = GlobalData.cdnGameConfig.PropAV;
+					if(key3 == 'DJSAB'){
+						item2[key3].DJShare = GData.cdnGameConfig.DJShare;
+						item2[key3].DJAV = GData.cdnGameConfig.DJAV;
 					}
 				}
 			}
@@ -64,21 +64,21 @@ let util = {
 	refreshOneNum(scaleFlag = 0){
 		var enabled = false;
 		if(scaleFlag == 1){
-			enabled = Math.random() <= GlobalData.cdnGameConfig.PropFreshEnableRate;
+			enabled = Math.random() <= GData.cdnGameConfig.DJFreshEnableRate;
 		}else if(scaleFlag == 2){
-			enabled = Math.random() <= GlobalData.cdnGameConfig.NoDeadRate;
+			enabled = Math.random() <= GData.cdnGameConfig.NoDeadRate;
 		}
 		if(enabled == true){
 			var selectNum = new Array();
-			for(var i = GlobalData.RANK_TOP;i < 6;i++){
-				for(var j = GlobalData.FILE_LEFT;j < 6;j++){
-					var fsq = GlobalData.COORD_XY(i,j);
-					if(GlobalData.numMap[fsq] == 0){
-						for(var m = 0;m < GlobalData.moveStep.length;m++){
-							var step = GlobalData.moveStep[m];
-							var tsq = GlobalData.COORD_XY(i + step[0],j + step[1]);
-							if(GlobalData.numMap[tsq] != 0){
-								selectNum.push(GlobalData.numMap[tsq]);
+			for(var i = GData.RANK_TOP;i < 6;i++){
+				for(var j = GData.FILE_LEFT;j < 6;j++){
+					var fsq = GData.COORD_XY(i,j);
+					if(GData.numMap[fsq] == 0){
+						for(var m = 0;m < GData.moveStep.length;m++){
+							var step = GData.moveStep[m];
+							var tsq = GData.COORD_XY(i + step[0],j + step[1]);
+							if(GData.numMap[tsq] != 0){
+								selectNum.push(GData.numMap[tsq]);
 							}
 						}
 					}
@@ -91,15 +91,15 @@ let util = {
 				return num;
 			}
 		}
-		var num = -1;//test[GlobalData.gameRunTimeParam.stepNum % test.length];
-		var numRateMap = GlobalData.cdnNumRate;
-		if(GlobalData.gameRunTimeParam.juNum > GlobalData.cdnGameConfig.NumRateJuNum){
-			numRateMap = GlobalData.cdnNumRate15;
+		var num = -1;//test[GData.GRunTimeParam.stepNum % test.length];
+		var numRateMap = GData.cdnNumRate;
+		if(GData.GRunTimeParam.juNum > GData.cdnGameConfig.NumRateJuNum){
+			numRateMap = GData.cdnNumRate15;
 		}
 		while(num == -1){
 			var lastKey = 'default';
 			for(var key in numRateMap){
-				if(GlobalData.gameRunTimeParam.stepNum <= key){
+				if(GData.GRunTimeParam.stepNum <= key){
 					lastKey = key;
 					break;
 				}
@@ -176,7 +176,7 @@ let util = {
 			sharedCanvas.width = 640;
 			sharedCanvas.height = 1136;
 			pthis.mainGameBoard.setPosition(cc.v2(0,-40));
-			GlobalData.phoneModel = 'IphoneX';
+			GData.phoneModel = 'IphoneX';
 		}else if(this.getPhoneModel() == 'IphoneXR'){
 			cc.view.setDesignResolutionSize(828, 1792, cc.ResolutionPolicy.FIXED_WIDTH);
 			pthis.node.scaleX = 828 / 640;
@@ -186,9 +186,9 @@ let util = {
 			sharedCanvas.width = 640;
 			sharedCanvas.height = 1136;
 			pthis.mainGameBoard.setPosition(cc.v2(0,-40));
-			GlobalData.phoneModel = 'IphoneXR';
+			GData.phoneModel = 'IphoneXR';
 		}else{
-			GlobalData.phoneModel = 'Normal';
+			GData.phoneModel = 'Normal';
 		}
 	},
 	compareVersion:function(v1, v2) {

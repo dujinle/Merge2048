@@ -26,7 +26,7 @@ cc.Class({
 			this.unschedule(this.loadUpdate);
 		}
 		this.iscallBack = false;
-		if(this.openType == "PropShare"){
+		if(this.openType == "DJShare"){
 			var param = {
 				type:null,
 				arg:null,
@@ -35,11 +35,11 @@ cc.Class({
 				shareName:this.openType,
 				isWait:true
 			};
-			if(GlobalData.cdnGameConfig.shareCustomSet == 0){
+			if(GData.cdnGameConfig.shareCustomSet == 0){
 				param.isWait = false;
 			}
 			ThirdAPI.shareGame(param);
-		}else if(this.openType == "PropAV"){
+		}else if(this.openType == "DJAV"){
 			this.AVSuccessCb = function(arg){
 				EventManager.emitLogic({type:'ReliveBack',action:this.action});
 			};
@@ -47,7 +47,7 @@ cc.Class({
 				if(arg == 'cancle'){
 					this.showFailInfo();
 				}else if(arg == 'error'){
-					this.openType = "PropShare";
+					this.openType = "DJShare";
 					this.continueNow(null);
 				}
 			};
@@ -74,7 +74,7 @@ cc.Class({
 		try{
 			var self = this;
 			var content = '请分享到不同的群获得更多的好友帮助!';
-			if(this.openType == 'PropAV'){
+			if(this.openType == 'DJAV'){
 				content = '看完视频才能获得奖励，请再看一次!';
 			}
 			wx.showModal({
@@ -99,10 +99,10 @@ cc.Class({
 		this.node.runAction(cc.scaleTo(0.2,1));
 		this.openType = prop;
 		this.action = action;
-		if(this.openType == 'PropShare'){
-			this.openSprite.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['share'];
-		}else if(this.openType == 'PropAV'){
-			this.openSprite.getComponent(cc.Sprite).spriteFrame = GlobalData.assets['share_video'];
+		if(this.openType == 'DJShare'){
+			this.openSprite.getComponent(cc.Sprite).spriteFrame = GData.assets['share'];
+		}else if(this.openType == 'DJAV'){
+			this.openSprite.getComponent(cc.Sprite).spriteFrame = GData.assets['share_videw'];
 		}
 		this.loadUpdate = function(){
 			self.rate = self.rate - 1;

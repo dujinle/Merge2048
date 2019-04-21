@@ -24,8 +24,8 @@ cc.Class({
 	initInnerChain(time){
 		var self = this;
 		this.innerChainNode.active = false;
-		if(GlobalData.cdnPropParam.PropUnLock.PropLocker <= GlobalData.gameRunTimeParam.juNum){
-			this.innerChainNode.getComponent('ScrollLinkGame').createAllLinkGame(GlobalData.cdnOtherGameDoor.locker);
+		if(GData.cdnPropParam.PropUnLock.PropLocker <= GData.GRunTimeParam.juNum){
+			this.innerChainNode.getComponent('ScrollLinkGame').createAllLinkGame(GData.cdnOtherGameDoor.locker);
 			this.node.runAction(cc.sequence(cc.delayTime(time),cc.callFunc(function(){
 				self.innerChainNode.active = true;
 			})));
@@ -33,7 +33,7 @@ cc.Class({
 	},
 	show(){
 		console.log("showPause game board show");
-		if(GlobalData.AudioSupport == false){
+		if(GData.AudioSupport == false){
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
 		}else{
@@ -42,14 +42,14 @@ cc.Class({
 		}
 		this.node.active = true;
 		this.pauseBg.scale = 0;
-		var pauseBgScale = cc.scaleTo(GlobalData.TimeActionParam.PauseGameMoveTime,1);
+		var pauseBgScale = cc.scaleTo(GData.TimeActionParam.PauseGameMoveTime,1);
 		this.pauseBg.runAction(pauseBgScale);
-		this.initInnerChain(GlobalData.TimeActionParam.PauseGameMoveTime);
+		this.initInnerChain(GData.TimeActionParam.PauseGameMoveTime);
 	},
 	hidePause(callBack = null){
 		var self = this;
 		console.log("start game board hide");
-		var pauseBgScale = cc.scaleTo(GlobalData.TimeActionParam.PauseGameMoveTime,0.2);
+		var pauseBgScale = cc.scaleTo(GData.TimeActionParam.PauseGameMoveTime,0.2);
 		this.pauseBg.runAction(pauseBgScale);
 		var hideAction = cc.callFunc(function(){
 			if(callBack != null){
@@ -58,7 +58,7 @@ cc.Class({
 		},this);
 		
 		this.node.runAction(cc.sequence(
-			cc.delayTime(GlobalData.TimeActionParam.PauseGameMoveTime),
+			cc.delayTime(GData.TimeActionParam.PauseGameMoveTime),
 			hideAction
 		));
 	},
@@ -66,12 +66,12 @@ cc.Class({
 		EventManager.emitLogic({type:'PauseRestart'});
 	},
 	pauseSound(){
-		if(GlobalData.AudioSupport == false){
+		if(GData.AudioSupport == false){
 			this.soundOnNode.active = true;
 			this.soundOffNode.active = false;
-			GlobalData.AudioSupport = true;
+			GData.AudioSupport = true;
 		}else{
-			GlobalData.AudioSupport = false;
+			GData.AudioSupport = false;
 			this.soundOnNode.active = false;
 			this.soundOffNode.active = true;
 		}

@@ -31,7 +31,7 @@ cc.Class({
 		//this.sharedCanvas.height = 1136;
 	},
 	onClose(){
-		GlobalData.gameRunTimeScene['PBRankGameBoard'] = null;
+		GData.gameRunTimeScene['PBRankGameBoard'] = null;
 		this.node.removeFromParent();
 		this.node.destroy();
 	},

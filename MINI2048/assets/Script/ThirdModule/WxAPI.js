@@ -74,15 +74,15 @@ let WxGlobal = {
                 // 判断是否大于最小分享时间
                 let d = new Date();
                 console.log("收获分享：判断是否大于最小分享时间", d, this.sharePointConfig.shareTime);
-                if (Date.parse(d) - Date.parse(this.sharePointConfig.shareTime) > GlobalData.cdnGameConfig.minShareTime * 1000) {
+                if (Date.parse(d) - Date.parse(this.sharePointConfig.shareTime) > GData.cdnGameConfig.minShareTime * 1000) {
                     // 大于最小分享时间
                     console.log("大于最小分享时间");
 
-                    let successWeightIndex = GlobalData.gameRunTimeParam.shareTimes % GlobalData.cdnGameConfig.shareSuccessWeight.length;
-                    let successWeight = GlobalData.cdnGameConfig.shareSuccessWeight[successWeightIndex];
+                    let successWeightIndex = GData.GRunTimeParam.shareTimes % GData.cdnGameConfig.shareSuccessWeight.length;
+                    let successWeight = GData.cdnGameConfig.shareSuccessWeight[successWeightIndex];
                     let isSuccess = Math.random() < successWeight;
 
-                    console.log("分享成功概率：", isSuccess, GlobalData.gameRunTimeParam.shareTimes, successWeightIndex, successWeight);
+                    console.log("分享成功概率：", isSuccess, GData.GRunTimeParam.shareTimes, successWeightIndex, successWeight);
 
                     // 判断是否随机到成功
                     if (isSuccess) {
@@ -97,7 +97,7 @@ let WxGlobal = {
                             this.sharePointConfig.failcallback("cancel", this.sharePointConfig.arg);
                         }
                     }
-                    GlobalData.gameRunTimeParam.shareTimes++;
+                    GData.GRunTimeParam.shareTimes++;
                 } else {
                     // 小于最小分享时间
                     console.log("小于最小分享时间");
@@ -143,10 +143,10 @@ let WxGlobal = {
     getShareInfo: function () {
         var imageUrl;
         var text;
-        var shareIndex = util.getRandomIndexForArray(GlobalData.cdnShareImages);
+        var shareIndex = util.getRandomIndexForArray(GData.cdnShareImages);
         if (shareIndex > -1) {
-            imageUrl = GlobalData.cdnShareImages[shareIndex];
-            text = GlobalData.cdnTexts[shareIndex];
+            imageUrl = GData.cdnShareImages[shareIndex];
+            text = GData.cdnTexts[shareIndex];
         }
         return {
             imageUrl: imageUrl,
@@ -162,10 +162,10 @@ let WxGlobal = {
             console.log('支持版本小于1.9.92，不能存储到微信云端');
             return;
         }
-        if (!GlobalData) return;
+        if (!GData) return;
         //存储key-value格式数据到微信云端
-        var maxscore = parseInt(GlobalData.gameRunTimeParam.maxScore);
-        var gold = parseInt(GlobalData.gameRunTimeParam.gold);
+        var maxscore = parseInt(GData.GRunTimeParam.maxScore);
+        var gold = parseInt(GData.GRunTimeParam.gold);
 
         let obj = {
             KVDataList: [{

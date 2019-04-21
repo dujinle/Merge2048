@@ -9,12 +9,12 @@ cc.Class({
 		this.node.scale = 0;
 	},
 	startFly(delayTime,name,numNum,endPos,cb){
-		this.bgSprite.getComponent(cc.Sprite).spriteFrame = GlobalData.assets[name];
+		this.bgSprite.getComponent(cc.Sprite).spriteFrame = GData.assets[name];
 		this.numLabel.getComponent(cc.Label).string = "x " + numNum;
 
-		var scaleTo = cc.scaleTo(GlobalData.TimeActionParam.EatFlyTimeCell,1);
-		var moveEnd = cc.moveTo(GlobalData.TimeActionParam.EatFlyTimeCell,endPos);
-		var scaleToS = cc.scaleTo(GlobalData.TimeActionParam.EatFlyTimeCell,0);
+		var scaleTo = cc.scaleTo(GData.TimeActionParam.EatFlyTimeCell,1);
+		var moveEnd = cc.moveTo(GData.TimeActionParam.EatFlyTimeCell,endPos);
+		var scaleToS = cc.scaleTo(GData.TimeActionParam.EatFlyTimeCell,0);
 		var scaleToEnd = cc.spawn(scaleToS,moveEnd);
 		var self = this;
 		var destroyAction = cc.callFunc(function(){
@@ -24,6 +24,6 @@ cc.Class({
 				cb();
 			}
 		},this);
-		this.node.runAction(cc.sequence(cc.delayTime(delayTime),scaleTo,cc.delayTime(GlobalData.TimeActionParam.EatFlyTimeCell/2),scaleToEnd,destroyAction));
+		this.node.runAction(cc.sequence(cc.delayTime(delayTime),scaleTo,cc.delayTime(GData.TimeActionParam.EatFlyTimeCell/2),scaleToEnd,destroyAction));
 	},
 });

@@ -23,7 +23,7 @@ cc.Class({
 	show(){
 		var params = {
 			type:'battleUIRank',
-			score:GlobalData.gameRunTimeParam.totalScore
+			score:GData.GRunTimeParam.totalScore
 		};
 		ThirdAPI.getRank(params);
 	},

@@ -16,7 +16,7 @@ cc.Class({
 		var callFunc = cc.callFunc(function(){
 			self.guideNode.setPosition(startPos);
 		});
-		var moveEnd = cc.moveTo(GlobalData.TimeActionParam.GuideMoveTime,endPos);
+		var moveEnd = cc.moveTo(GData.TimeActionParam.GuideMoveTime,endPos);
 		var repeat = cc.repeatForever(cc.sequence(moveEnd,callFunc));
 		this.guideNode.runAction(repeat);
 	},

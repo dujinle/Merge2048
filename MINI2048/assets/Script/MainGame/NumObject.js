@@ -11,8 +11,8 @@ cc.Class({
     onInit(num) {
 		this.value = num;
 		this.node.scale = 1;
-		var spriteFrameName = GlobalData.skin + '_' + num;
-		this.bgSprite.getComponent(cc.Sprite).spriteFrame = GlobalData.assets[spriteFrameName];
+		var spriteFrameName = GData.skin + '_' + num;
+		this.bgSprite.getComponent(cc.Sprite).spriteFrame = GData.assets[spriteFrameName];
 		this.bgSprite.runAction(cc.fadeIn(0));
 	},
 	merge2048Action(audioManager,sq,callback){
@@ -21,17 +21,17 @@ cc.Class({
 		var ESAction = cc.callFunc(function(){
 			var E1Sprite = new cc.Node("E1");
 			var sprite = E1Sprite.addComponent(cc.Sprite);
-			sprite.spriteFrame = GlobalData.assets["eliminate_1"];
+			sprite.spriteFrame = GData.assets["eliminate_1"];
 			self.node.addChild(E1Sprite);
 			
 			var E2Sprite = new cc.Node("E2");
 			sprite = E2Sprite.addComponent(cc.Sprite);
-			sprite.spriteFrame = GlobalData.assets["eliminate_2"];
+			sprite.spriteFrame = GData.assets["eliminate_2"];
 			self.node.addChild(E2Sprite);
 			
 			var E3Sprite = new cc.Node("E3");
 			sprite = E3Sprite.addComponent(cc.Sprite);
-			sprite.spriteFrame = GlobalData.assets["eliminate_3"];
+			sprite.spriteFrame = GData.assets["eliminate_3"];
 			self.node.addChild(E3Sprite);
 			console.log(E1Sprite.scale);
 			E1Sprite.scale = 1;
@@ -43,21 +43,21 @@ cc.Class({
 			E1Sprite.runAction(cc.sequence(scaleBig1.clone(),cc.fadeOut(0.1)));
 			E2Sprite.runAction(cc.sequence(cc.delayTime(0.3),scaleBig1.clone(),cc.fadeOut(0.1)));
 			E3Sprite.runAction(cc.sequence(cc.delayTime(0.6),scaleBig1.clone(),cc.fadeOut(0.1)));
-			audioManager.getComponent('AudioManager').play(GlobalData.AudioParam.AudioClearLight);
+			audioManager.getComponent('AudioManager').play(GData.AudioParam.AudioClearLight);
 		});
 		
 		var numAction = cc.callFunc(function(){
-			var x = GlobalData.FILE_X(sq);
-			var y = GlobalData.RANK_Y(sq);
-			for(var j = 0;j < GlobalData.moveStep.length;j++){
-				var step = GlobalData.moveStep[j];
-				var tsq = GlobalData.COORD_XY(x + step[0],y + step[1]);
-				if(GlobalData.numMap[tsq] != 0){
-					GlobalData.numNodeMap[tsq].removeFromParent();
-					GlobalData.numNodeMap[tsq].destroy();
+			var x = GData.FILE_X(sq);
+			var y = GData.RANK_Y(sq);
+			for(var j = 0;j < GData.moveStep.length;j++){
+				var step = GData.moveStep[j];
+				var tsq = GData.COORD_XY(x + step[0],y + step[1]);
+				if(GData.numMap[tsq] != 0){
+					GData.numNodeMap[tsq].removeFromParent();
+					GData.numNodeMap[tsq].destroy();
 				}
-				GlobalData.numNodeMap[tsq] = 0;
-				GlobalData.numMap[tsq] = 0;
+				GData.numNodeMap[tsq] = 0;
+				GData.numMap[tsq] = 0;
 			}
 			console.log("merge2048Action",sq);
 			callback();
@@ -68,15 +68,15 @@ cc.Class({
 	//动画增大一次这里加入延迟参数 多次执行的时候延迟一下
 	scaleBigOnce(audioManager){
 		this.initScale = this.node.scale;
-		var scaleUpAction = cc.scaleTo(GlobalData.TimeActionParam.EatNodeBigTime, this.pressedScale);
-        var scaleDownAction = cc.scaleTo(GlobalData.TimeActionParam.EatNodeBigTime, this.initScale);
-		audioManager.getComponent('AudioManager').play(GlobalData.AudioParam.AudioFall);
+		var scaleUpAction = cc.scaleTo(GData.TimeActionParam.EatNodeBigTime, this.pressedScale);
+        var scaleDownAction = cc.scaleTo(GData.TimeActionParam.EatNodeBigTime, this.initScale);
+		audioManager.getComponent('AudioManager').play(GData.AudioParam.AudioFall);
 		this.node.runAction(cc.sequence(scaleUpAction,scaleDownAction));
 	},
 	flyMergeScore(key,length,idx,addScore){
 		console.log('flyMergeScore action......',idx,this.flyNode);
 		if(this.flyNode == null){
-			this.flyNode = cc.instantiate(GlobalData.assets["PBNumFly"]);
+			this.flyNode = cc.instantiate(GData.assets["PBNumFly"]);
 			this.node.addChild(this.flyNode);
 		}
 		this.flyNode.stopAllActions();
@@ -90,19 +90,19 @@ cc.Class({
 		this.initScale = this.node.scale;
 		this.node.scale = 0;
 		this.onInit(num);
-		var scaleUpAction = cc.scaleTo(GlobalData.TimeActionParam.RefreshNodeTime, this.pressedScale);
-        var scaleDownAction = cc.scaleTo(GlobalData.TimeActionParam.RefreshNodeTime, this.initScale);
+		var scaleUpAction = cc.scaleTo(GData.TimeActionParam.RefreshNodeTime, this.pressedScale);
+        var scaleDownAction = cc.scaleTo(GData.TimeActionParam.RefreshNodeTime, this.initScale);
 		var playAudioAction = cc.callFunc(function(){
-			audioManager.getComponent('AudioManager').play(GlobalData.AudioParam.AudioFall);
+			audioManager.getComponent('AudioManager').play(GData.AudioParam.AudioFall);
 		},this);
 		this.node.runAction(cc.sequence(scaleUpAction,scaleDownAction));
-		this.node.runAction(cc.sequence(cc.delayTime(GlobalData.TimeActionParam.RefreshNodeTime),playAudioAction));
+		this.node.runAction(cc.sequence(cc.delayTime(GData.TimeActionParam.RefreshNodeTime),playAudioAction));
 	},
 	MergeFinishNum(num,cb){
 		this.onInit(num);
 		this.initScale = this.node.scale;
-		var scaleUpAction = cc.scaleTo(GlobalData.TimeActionParam.EatNodeBigTime, this.pressedScale);
-        var scaleDownAction = cc.scaleTo(GlobalData.TimeActionParam.EatNodeBigTime, this.initScale);
+		var scaleUpAction = cc.scaleTo(GData.TimeActionParam.EatNodeBigTime, this.pressedScale);
+        var scaleDownAction = cc.scaleTo(GData.TimeActionParam.EatNodeBigTime, this.initScale);
 		var finish = cc.callFunc(function(){
 			if(cb != null){
 				cb();

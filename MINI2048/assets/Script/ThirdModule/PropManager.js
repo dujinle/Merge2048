@@ -2,7 +2,7 @@ let PropManager = {
 	//获取道具
 	getProp(mergeNum){
 		//获取 刷新/宝箱的概率
-		var mergeParam = this.getParamByJuShu(GlobalData.cdnPropParam.MergeParam);
+		var mergeParam = this.getParamByJuShu(GData.cdnPropParam.MergeParam);
 		var propsRate = mergeParam[mergeNum];
 		//随机获取一个道具 刷新或者宝箱
 		var prop = this.getRandomRateKey(propsRate);
@@ -10,25 +10,25 @@ let PropManager = {
 			return null;
 		}
 		//随机的刷新道具
-		if(prop == "PropFresh"){
+		if(prop == "DJFresh"){
 			//并且道具已经开锁
-			if(GlobalData.cdnPropParam.PropUnLock[prop] <= GlobalData.gameRunTimeParam.juNum){
+			if(GData.cdnPropParam.PropUnLock[prop] <= GData.GRunTimeParam.juNum){
 				return prop;
 			}
-		}else if(prop == "PropSAB"){
+		}else if(prop == "DJSAB"){
 			//确定宝箱是否解锁
-			if(GlobalData.cdnPropParam.PropUnLock['PropSAB'] > GlobalData.gameRunTimeParam.juNum){
+			if(GData.cdnPropParam.PropUnLock['DJSAB'] > GData.GRunTimeParam.juNum){
 				//没有解锁 直接获取 刷新道具
-				return "PropFresh";
+				return "DJFresh";
 			}
 			prop = this.getShareOrADKey(prop);
 			//如果是分享则判断是否解锁
-			if(GlobalData.cdnPropParam.PropUnLock[prop] > GlobalData.gameRunTimeParam.juNum){
+			if(GData.cdnPropParam.PropUnLock[prop] > GData.GRunTimeParam.juNum){
 				return null;
 			}
-			propsRate = GlobalData.cdnPropParam.SABOpenRate;
+			propsRate = GData.cdnPropParam.SABOpenRate;
 			var secondProp = this.getRandomRateKey(propsRate);;
-			if(GlobalData.cdnPropParam.PropUnLock[secondProp] <= GlobalData.gameRunTimeParam.juNum){
+			if(GData.cdnPropParam.PropUnLock[secondProp] <= GData.GRunTimeParam.juNum){
 				return prop + "_" + secondProp;;
 			}
 		}
@@ -36,30 +36,30 @@ let PropManager = {
 	},
 	getPropRelive(){
 		//如果没有解锁 不可用
-		//GlobalData.GamePropParam.bagNum.PropRelive += 1;
-		//return 'PropShare';
-		if(GlobalData.cdnPropParam.PropUnLock.PropRelive > GlobalData.gameRunTimeParam.juNum){
+		//GData.GamePropParam.bagNum.DJRelive += 1;
+		//return 'DJShare';
+		if(GData.cdnPropParam.PropUnLock.DJRelive > GData.GRunTimeParam.juNum){
 			console.log('getPropRelive unLock');
 			return null;
 		}
 		//判断是否到达使用上限
-		var propBag = this.getPropBag('PropRelive');
-		if(GlobalData.GamePropParam.useNum['PropRelive'] >= propBag.useNum){
+		var propBag = this.getPropBag('DJRelive');
+		if(GData.GamePropParam.useNum['DJRelive'] >= propBag.useNum){
 			return null;
 		}
 		//如果有道具了 就不获取了
-		if(GlobalData.GamePropParam.bagNum.PropRelive > 0){
-			var prop = this.getShareOrADKey('PropRelive');
+		if(GData.GamePropParam.bagNum.DJRelive > 0){
+			var prop = this.getShareOrADKey('DJRelive');
 			console.log("getPropRelive",prop);
 			return prop;
 		}
-		if(GlobalData.GamePropParam.bagNum.PropRelive == 0){
+		if(GData.GamePropParam.bagNum.DJRelive == 0){
 			var random = Math.random();
-			var reliveRate = this.getParamByJuShu(GlobalData.cdnPropParam.PropReliveRate);
+			var reliveRate = this.getParamByJuShu(GData.cdnPropParam.DJReliveRate);
 			console.log("getPropRelive",random,reliveRate);
 			if(random <= reliveRate){
-				GlobalData.GamePropParam.bagNum.PropRelive += 1;
-				return this.getShareOrADKey('PropRelive');
+				GData.GamePropParam.bagNum.DJRelive += 1;
+				return this.getShareOrADKey('DJRelive');
 			}else{
 				return null;
 			}
@@ -67,22 +67,22 @@ let PropManager = {
 	},
 	getPropStart(){
 		//如果没有解锁 不可用
-		if(GlobalData.cdnPropParam.PropUnLock.PropRelive > GlobalData.gameRunTimeParam.juNum){
+		if(GData.cdnPropParam.PropUnLock.DJRelive > GData.GRunTimeParam.juNum){
 			return null;
 		}
 		//如果有道具了 就不获取了
-		var propBag = this.getPropBag('PropRelive');
-		if(GlobalData.GamePropParam.useNum['PropRelive'] >= propBag.useNum){
+		var propBag = this.getPropBag('DJRelive');
+		if(GData.GamePropParam.useNum['DJRelive'] >= propBag.useNum){
 			return null;
 		}
-		if(GlobalData.GamePropParam.bagNum.PropRelive > 0){
-			var prop = this.getShareOrADKey('PropRelive');
+		if(GData.GamePropParam.bagNum.DJRelive > 0){
+			var prop = this.getShareOrADKey('DJRelive');
 			return prop;
 		}
 		return null;
 	},
 	getShareOrADKey(prop){
-		var trate = GlobalData.cdnPropParam.PropShareOrADRate[GlobalData.cdnGameConfig.gameModel];
+		var trate = GData.cdnPropParam.PropShareOrADRate[GData.cdnGameConfig.gameModel];
 		var propRate = this.getParamByJuShu(trate);
 		var propsRate = propRate[prop];
 		console.log(propsRate,prop);
@@ -104,12 +104,12 @@ let PropManager = {
 		return prop;
 	},
 	getPropBag(prop){
-		if(prop == 'PropFresh'){
-			return GlobalData.cdnPropParam.PropParam[prop];
+		if(prop == 'DJFresh'){
+			return GData.cdnPropParam.PropParam[prop];
 		}else{
-			var bag = GlobalData.cdnPropParam.PropParam[prop];
+			var bag = GData.cdnPropParam.PropParam[prop];
 			for(var key in bag){
-				if(GlobalData.gameRunTimeParam.juNum <= key){
+				if(GData.GRunTimeParam.juNum <= key){
 					return bag[key];
 				}
 			}
@@ -119,7 +119,7 @@ let PropManager = {
 	/*根据局数获取对应的参数 包括标记局*/
 	getParamByJuShu(data){
 		for(var key in data){
-			if(GlobalData.gameRunTimeParam.juNum <= key){
+			if(GData.GRunTimeParam.juNum <= key){
 				return data[key];
 			}
 		}
